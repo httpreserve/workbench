@@ -14,7 +14,7 @@ func launchRemoteBackgroundProcess() {
 	cmd := exec.Command("httpreserve-app", "-demo")
 	err := cmd.Start()
 	if err != nil {
-		fmt.Fprintln(os.Stderr, "Error starting myself in the background.\n")
+		fmt.Fprintln(os.Stderr, "Error starting myself in the background")
 	}
 	time.Sleep(2)
 }

@@ -31,7 +31,10 @@ func makeHttpreservePOST() *http.Request {
 func makeRemoteRequest() {
 
 	client := &http.Client{}
-	resp, _ := client.Do(makeHttpreservePOST())
+	resp, err := client.Do(makeHttpreservePOST())
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "error making client request")
+	}
 	defer resp.Body.Close()
 	responseData, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
