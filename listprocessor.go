@@ -9,4 +9,3 @@ func listHandler(outputHandler func(ch chan string)) {
 	}
 	outputHandler(ch)
 }
-
