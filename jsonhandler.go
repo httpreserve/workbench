@@ -34,7 +34,7 @@ func outputFooter() string {
 
 // TODO: consider more idiomatic approaches to achieving what we do here,
 // that is, fmt.Println() is not really my approved approach (but it works (agile))
-func toStdout(ch chan string) {
+func jsonHandler(ch chan string) {
 
    //output JSON header
    fmt.Fprintf(os.Stdout, "%s", outputHeader())
@@ -54,10 +54,3 @@ func toStdout(ch chan string) {
    fmt.Fprintf(os.Stdout, "%s", outputFooter())
 }
 
-func jsonhandler() {
-	ch := make(chan string)
-	for l, f := range linkmap {
-		go channelLocalLink(l, f, ch)
-	}
-	toStdout(ch)
-}

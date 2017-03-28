@@ -35,7 +35,7 @@ func configureHashID() string {
 	return e
 }
 
-func boltdbHandler() {
+func boltdbHandler(ch chan string) {
 	boltname := configureHashID()
 
 	kb, err := kval.Connect("HP_" + boltname + ".bolt")

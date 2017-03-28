@@ -96,12 +96,12 @@ func getLocalLink() {
 func programrunner() {
 
 	if jsonout {
-		jsonhandler()
+		listHandler(jsonHandler)
 		return
 	}
 
 	if boltdb {
-		boltdbHandler()
+		listHandler(boltdbHandler)
 		return
 	}
 
