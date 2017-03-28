@@ -73,30 +73,6 @@ func makeFnameIndex(kb kval.Kvalboltdb, lmap map[string]interface{}) {
 	}
 }
 
-func storeStruct(kb kval.Kvalboltdb, ls httpreserve.LinkStats) {
-
-	var lmap = make(map[string]interface{})
-
-	lmap["filename"] = ls.FileName
-	lmap["analysis version number"] = ls.AnalysisVersionNumber
-	lmap["analysis version text"] = ls.AnalysisVersionText
-	lmap["link"] = ls.Link
-	lmap["response code"] = ls.ResponseCode
-	lmap["response text"] = ls.ResponseText
-	lmap["screen shot"] = ls.ScreenShot
-	lmap["internet archive latest"] = ls.InternetArchiveLinkLatest
-	lmap["internet archive earliest"] = ls.InternetArchiveLinkEarliest
-	lmap["internet archive save link"] = ls.InternetArchiveSaveLink
-	lmap["internet archive response code"] = ls.InternetArchiveResponseCode
-	lmap["internet archive response text"] = ls.InternetArchiveResponseText
-	lmap["archived"] = ls.Archived
-	lmap["protocol error"] = ls.ProtocolError
-	lmap["protocol error"] = ls.ProtocolErrorMessage
-
-	makeLinkIndex(kb, lmap)
-	makeFnameIndex(kb, lmap)
-}
-
 const boltdir = "db/"
 
 func makeBoltDir() {
@@ -129,14 +105,8 @@ func boltdbHandler(ch chan string) {
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
 		}
-		storeStruct(kb, ls)
+		lmap := storeStruct(ls)
+		makeLinkIndex(kb, lmap)
+		makeFnameIndex(kb, lmap)
 	}
-
-	/*test queries
-	t := "GET " + fnameIndex + " >> bbc news"
-	abv, _ := kval.Query(kb, t)
-	//"InternetArchiveLinkLatest"
-	for k, v := range abv.Result {
-		fmt.Fprintf(os.Stderr, "\n\n%s, %s\n", k, v)
-	}*/
 }
