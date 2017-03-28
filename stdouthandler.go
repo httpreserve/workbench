@@ -1,6 +1,7 @@
 package main
 
 import (
+   "os"
 	"fmt"
 )
 
@@ -16,13 +17,29 @@ var linkmap = map[string]string{
 	"http://www.nationalarchives.gov.uk/": "tna",
 }
 
+func outputHeader() string {
+   var header string
+   header = header + fmt.Sprintf("%s\n", "{")
+   header = header + fmt.Sprintf("  \"%s\": \"%s\",\n", "title", "httpreserve")
+   header = header + fmt.Sprintf("  \"%s\": \"%s\",\n", "description", "httpreserve client output")  
+   header = header + fmt.Sprintf("  \"%s\": %s\n", "data", "[")
+   return header
+}
+
+func outputFooter() string {
+   var footer string
+   footer = footer + fmt.Sprintf("%s\n%s", "]", "}")
+   return footer   
+}
+
 // TODO: consider more idiomatic approaches to achieving what we do here,
 // that is, fmt.Println() is not really my approved approach (but it works (agile))
 func toStdout(ch chan string) {
-	fmt.Println("{")
-	fmt.Println("\"title\": \"httpreserve client example\",")
-	fmt.Println("\"data\": [")
 
+   //output JSON header
+   fmt.Fprintf(os.Stdout, "%s", outputHeader())
+
+   //output JSON body
 	var count int
 	for range linkmap {
 		count += 1
@@ -32,7 +49,9 @@ func toStdout(ch chan string) {
 			fmt.Println(",")
 		}
 	}
-	fmt.Println("]\n}")
+
+   //output JSON footer
+   fmt.Fprintf(os.Stdout, "%s", outputFooter())
 }
 
 func jsonhandler() {
