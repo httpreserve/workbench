@@ -100,6 +100,15 @@ func programrunner() {
 		return
 	}
 
+	if boltdb {
+		boltdbHandler()
+		return
+	}
+
+	if webapp {
+		fmt.Fprintln(os.Stderr, "Handling webapp here.")
+	}
+
 	if demo {
 		//setup our demo server to communicate with
 		demosetup()
