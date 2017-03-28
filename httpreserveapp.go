@@ -17,22 +17,38 @@ var (
 	linklabel  string
 	remote     bool
 
+	//output methods
+	boltdb  bool
+	jsonout bool
+	webapp  bool
+
 	//testing
-	test 			bool
+	test bool
 )
 
 func init() {
 	flag.BoolVar(&demo, "demo", false, "Run demo server on port:2040 unless -port is set.")
 	flag.BoolVar(&vers, "version", false, "Return httpreserve version.")
 	flag.BoolVar(&vers, "v", false, "Return httpreserve version.")
-	flag.StringVar(&demoport, "demoport", "", "Set a port to run httpreserve demo on localhost.")
-	flag.StringVar(&demomethod, "demomethod", "", "Set a method to push queries through the demo, e.g. POST or GET.")
+
+	//flags to return a single result
 	flag.StringVar(&link, "link", "", "Seek the status of a single weblink.")
 	flag.StringVar(&linklabel, "linklabel", "", "Annotate response with filename, or label.")
+
+	//demo configuration
+	flag.StringVar(&demoport, "demoport", "", "Set a port to run httpreserve demo on localhost.")
+	flag.StringVar(&demomethod, "demomethod", "", "Set a method to push queries through the demo, e.g. POST or GET.")
+
+	//retireve stats from web service
 	flag.BoolVar(&remote, "remote", false, "Send requests to remote connection.")
 
 	//testing flags for testing whatever we're working on at present
 	flag.BoolVar(&test, "test", false, "use test function while developing functionality.")
+
+	//output method flags
+	flag.BoolVar(&boltdb, "bolt", false, "Output to static BoltDB.")
+	flag.BoolVar(&jsonout, "json", false, "Output to JSON.")
+	flag.BoolVar(&webapp, "webapp", false, "Output for analysis via webapp.")
 }
 
 func demosetup() {
@@ -77,45 +93,10 @@ func getLocalLink() {
 	fmt.Fprintf(os.Stdout, "%s", js)
 }
 
-func channelLocalLink(link string, filename string, ch chan string) {
-	ch <- libLink(link, filename)
-}
-
-var linkmap = map[string]string{
-	"http://www.bbc.co.uk/news": "bbc news",
-	"http://www.bbc.co.uk/": "bbc home",	
-	"http://www.bbc.co.uk/radio": "bbc radio",	
-	"http://www.nationalarchives.gov.uk/": "tna",
-}
-
-func testfunction() {
-   ch := make(chan string)
-   for l, f := range linkmap {
-		go channelLocalLink(l, f, ch)	
-   }
-
-
-   fmt.Println("{")
-   fmt.Println("\"title\": \"httpreserve client example\",")
-   fmt.Println("\"data\": [")   
-
-   var count int
-   for range linkmap {
-   	count+=1
-   	ce := <- ch
-   	fmt.Print(ce)
-   	if count < len(linkmap) {
-   		fmt.Println(",")
-   	}
-   }
-
-   fmt.Println("]\n}") 
-}
-
 func programrunner() {
 
-	if test {
-		testfunction()
+	if jsonout {
+		jsonhandler()
 		return
 	}
 
@@ -143,10 +124,12 @@ func main() {
 	} else if flag.NFlag() <= 0 {
 		fmt.Fprintln(os.Stderr, "Usage:  httpreserve-app [Optional -demo] [Optional -demoport] [Optional -method]")
 		fmt.Fprintln(os.Stderr, "                        [Optional -link] [Optional -linklabel] [Optional -remote]")
+		fmt.Fprintln(os.Stderr, "                        [Optional -list] [Optional -json]")
+		fmt.Fprintln(os.Stderr, "                                         [Optional -bolt]")
+		fmt.Fprintln(os.Stderr, "                                         [Optional -webapp]")
 		fmt.Fprintln(os.Stderr, "                        [Optional -version -v]")
 		fmt.Fprintln(os.Stderr, "")
-		fmt.Fprintln(os.Stderr, "        -test")		
-		fmt.Fprintln(os.Stderr, "")		
+		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "Output: [SERVER] 127.0.0.1:2040, [SERVER] 127.0.0.1:{port}")
 		fmt.Fprintf(os.Stderr, "Output: [JSON] '%s ...'\n", "{ \"httpreserveanalysis\": \"x,y,z\" }")
 		fmt.Fprintf(os.Stderr, "Output: [VERSION] '%s ...'\n", httpreserve.VersionText())
