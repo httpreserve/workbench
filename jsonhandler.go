@@ -9,14 +9,6 @@ func channelLocalLink(link string, filename string, ch chan string) {
 	ch <- libLink(link, filename)
 }
 
-//for now, for testing...
-var linkmap = map[string]string{
-	"http://www.bbc.co.uk/news":           "bbc news",
-	"http://www.bbc.co.uk/":               "bbc home",
-	"http://www.bbc.co.uk/radio":          "bbc radio",
-	"http://www.nationalarchives.gov.uk/": "tna",
-}
-
 func outputHeader() string {
 	var header string
 	header = header + fmt.Sprintf("%s\n", "{")

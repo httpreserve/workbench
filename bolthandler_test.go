@@ -19,3 +19,26 @@ package main
    "ProtocolErrorMessage": ""
 },
 */
+
+/*
+filename:bbc home  
+id:891609239375c54fe326a2e23a8c5397 
+
+filename:bbc radio 
+id:1d15698856a2487bade7d8994d21d30c
+
+filename:tna 
+id:3357924f215d974f627690dd6382076c
+
+id:43d4a499caa590e912c8a059f7ab8323 
+filename:bbc news */
+
+/*
+//for now, for testing...
+var linkmap = map[string]string{
+   "http://www.bbc.co.uk/news":           "bbc news",
+   "http://www.bbc.co.uk/":               "bbc home",
+   "http://www.bbc.co.uk/radio":          "bbc radio",
+   "http://www.nationalarchives.gov.uk/": "tna",
+}
+*/
