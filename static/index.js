@@ -17,6 +17,7 @@ setTimeout(refresh, timer);
 function httpreserve(formMethod) {
 
 	var analysistable = "httpreserve-analysis";
+	var httpreserveError = "httpreserve-error";
    var method = formMethod;
 
 	var xmlhttp = new XMLHttpRequest();
@@ -26,10 +27,10 @@ function httpreserve(formMethod) {
 				document.getElementById(analysistable).innerHTML = formatRow(xmlhttp.responseText);
 			}
 			else if (xmlhttp.status == 400) {
-            document.getElementById(analysistable).innerHTML = '[WARNING] There was an error 400';
+            document.getElementById(httpreserveError).innerHTML = '<div class="error"><br/>[WARNING] There was an error 400<br/></div><br/>';
 			}
 			else {
-            document.getElementById(analysistable).innerHTML = '[WARNING] something else other than 200 was returned';
+            document.getElementById(httpreserveError).innerHTML = '<div class="error"><br/>[WARNING] something else other than 200 was returned<br/><br/></div><br/>';
 			}
 		}
 	};
