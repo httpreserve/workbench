@@ -54,24 +54,6 @@ func configureHashID() string {
 	return e
 }
 
-// convertInterface will help us pipe generic values from
-// the deconstruction of httpreserve.LinkStats to a string for 
-// storage in BoltDB.
-func convertInterface(v interface{}) string {
-	var val string
-	switch v.(type) {
-	case string:
-		val = fmt.Sprintf("%s", v)
-	case int:
-		val = fmt.Sprintf("%d", v)
-	}
-
-	if val == "" {
-		return "\"\""
-	}
-	return val
-}
-
 // makeIDIndex will write rows to the BoldDB based on an MD5 hash value
 // associated with the lmap passed to the function (a deconstructed LinkStats)
 func makeIDIndex(kb kval.Kvalboltdb, lmap map[string]interface{}) {

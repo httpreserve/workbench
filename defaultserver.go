@@ -7,8 +7,6 @@ import (
 	"html/template"
 	"log"
 	"net/http"
-	"sync"
-	"time"
 )
 
 // Primary handler for httpreserve requests
@@ -105,23 +103,13 @@ func configureDefault() http.Handler {
 	return middlewareChain
 }
 
-var clock string
-func clockupdate() {
-	defer wg.Done()
-	for true {
-		clock = time.Now().Format("Mon Jan _2 15:04:05 2006")
-	}
-}
-
-
 // References contributing to this code...
 // https://cryptic.io/go-http/
 // https://github.com/justinas/alice
 
 // DefaultServer is our call to standup a default server
 // for the httpreserve resolver service to  be queried by our other apps.
-func DefaultServerx(port string) error {
-	defer wg.Done()
+func DefaultServer(port string) error {
 	middleWare := configureDefault()
 	err := http.ListenAndServe(":"+port, middleWare)
 	if err != nil {
@@ -130,14 +118,3 @@ func DefaultServerx(port string) error {
 	return nil
 }
 
-var wg sync.WaitGroup
-
-func DefaultServer(port string) error {
-	wg.Add(1)
-	go clockupdate()
-	wg.Add(1)
-	go DefaultServerx(port)
-
-	wg.Wait()
-	return nil
-}

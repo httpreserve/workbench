@@ -22,6 +22,9 @@ var (
 	jsonout bool
 	webapp  bool
 
+	//webapp config
+	port string
+
 	//testing
 	test bool
 )
@@ -49,6 +52,9 @@ func init() {
 	flag.BoolVar(&boltdb, "bolt", false, "Output to static BoltDB.")
 	flag.BoolVar(&jsonout, "json", false, "Output to JSON.")
 	flag.BoolVar(&webapp, "webapp", false, "Output for analysis via webapp.")
+
+	//other config parameters
+	flag.StringVar(&port, "port", "", "Port to use for httpreserve webapp.")
 }
 
 func demosetup() {
@@ -106,7 +112,8 @@ func programrunner() {
 	}
 
 	if webapp {
-		fmt.Fprintln(os.Stderr, "Handling webapp here.")
+		listHandler(webappHandler)
+		return
 	}
 
 	if demo {
@@ -125,10 +132,6 @@ func programrunner() {
 }
 
 func main() {
-	DefaultServer("2041") 
-}
-
-func tmain() {
 	flag.Parse()
 	if vers {
 		fmt.Fprintf(os.Stderr, "%s\n", "httpreserve-app version information:")
@@ -139,7 +142,7 @@ func tmain() {
 		fmt.Fprintln(os.Stderr, "                        [Optional -link] [Optional -linklabel] [Optional -remote]")
 		fmt.Fprintln(os.Stderr, "                        [Optional -list] [Optional -json]")
 		fmt.Fprintln(os.Stderr, "                                         [Optional -bolt]")
-		fmt.Fprintln(os.Stderr, "                                         [Optional -webapp]")
+		fmt.Fprintln(os.Stderr, "                                         [Optional -webapp] [Optional -port]")
 		fmt.Fprintln(os.Stderr, "                        [Optional -version -v]")
 		fmt.Fprintln(os.Stderr, "")
 		fmt.Fprintln(os.Stderr, "")

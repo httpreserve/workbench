@@ -16,6 +16,31 @@ func makeHash(js string) string {
 	return fmt.Sprintf("%x", md5.Sum(nil))
 }
 
+// convertInterface will help us pipe generic values from
+// the deconstruction of httpreserve.LinkStats to a string for 
+// storage in BoltDB.
+func convertInterface(v interface{}) string {
+	var val string
+	switch v.(type) {
+	case string:
+		val = fmt.Sprintf("%s", v)
+	case int:
+		val = fmt.Sprintf("%d", v)
+	case bool:
+		switch v {
+		case true:
+			val = "true"
+		case false:
+			val = "false"
+		}
+	}
+
+	if val == "" {
+		return "\"\""
+	}
+	return val
+}
+
 // storeStruct allows us to get a different representation of the LinkStats structure
 // e.g. as a map we have good flexibility over looping and passing around without
 // reglection to iterate through the struct for us.
@@ -58,4 +83,10 @@ var linkmap = map[string]string{
 	"http://www.bbc.co.uk/":               "bbc home",
 	"http://www.bbc.co.uk/radio":          "bbc radio",
 	"http://www.nationalarchives.gov.uk/": "tna",
+	"http://www.google.com": "",
+	"http://google.com": "",
+	"http://www.exponentialdecay.co.uk": "",
+	"http://www.archive.org": "",
+	"http://perma.cc": "",
+	"http://wikipedia.org": "",
 }

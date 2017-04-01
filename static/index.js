@@ -59,24 +59,24 @@ var content = ""
 function formatRow(data_arr) {
 
 	var tableStart = "<table><th>time</th>"
-	var trStart = "<tr><td>"
-	var trEnd = "</td></tr>"
 	var tableEnd = "</table>"
 	var padding = "<br/><br/><br/><br/>"
 
 	var arr = data_arr.split(",", 2)
+	var newRow = ""
 
 	if (data_arr.length > 0) {	
-		newRow = trStart + arr[1] + trEnd;
+		newRow = arr[1];
 	} else {
-		newRow = trStart + "server data issue" + trEnd;
+		timer = 0
+		return ""
 	}
 
-	//if (arr[0] == "false") {
-	//	timer = 0
-	//}
+	if (arr[0] == "false") {
+		timer = 0
+	}
 
-	content = content + newRow
-	return tableStart + content + tableEnd + padding;	
+	content = content + newRow;
+	return tableStart + content + tableEnd + padding;
 }
 
