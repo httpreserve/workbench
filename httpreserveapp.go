@@ -125,6 +125,10 @@ func programrunner() {
 }
 
 func main() {
+	DefaultServer("2041") 
+}
+
+func tmain() {
 	flag.Parse()
 	if vers {
 		fmt.Fprintf(os.Stderr, "%s\n", "httpreserve-app version information:")
