@@ -3,6 +3,7 @@
 <head>
   <title>Slick Playground</title>
   <meta charset="UTF-8">
+
   <link rel="stylesheet" type="text/css" href="static/slick/slick.css">
   <link rel="stylesheet" type="text/css" href="static/slick/slick-theme.css">
 
@@ -95,6 +96,8 @@
 
 	function updateSlick(content) {
 
+		var continueScroll = document.activeElement;
+
 		//let browsing continue
 		var currentSlide = $('.httpreserve').slick('slickCurrentSlide');
 
@@ -103,13 +106,16 @@
 		$('.httpreserve').slick('unslick');			
 		$('.httpreserve').slick('reinit');
 		$(".httpreserve").slick({
-		     dots: true,
+		     //dots: true,
 		     infinite: true,
 		     centerMode: true,
 		     slidesToShow: 3,
 		     slidesToScroll: 1
 		});
 		$(".httpreserve").slick('slickGoTo', currentSlide, true);
+		continueScroll.focus();
+}
+</script>
 	}
   </script>
 
