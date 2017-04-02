@@ -26,99 +26,32 @@ func min(a, b int) int {
     return b
 }
 
-var count int
-
-func tformatOutput(ps processLog, response string) string {
-	trStart := "<tr>"
-
-	trFNAME := "<td>" + convertInterface(ps.lmap["response text"]) + "</td>"
-	trVERSION := "<td>" + convertInterface(ps.lmap["analysis version text"]) + "</td>"
-	trLINK := "<td>" + convertInterface(ps.lmap["link"]) + "</td>"
-	trID := "<td>" + convertInterface(ps.lmap["archived"]) + "</td>"
-
-	trEnd := "</tr>"
-
-	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
-	return response 
-}
-
 func formatOutput(ps processLog, response string) string {
-	count++
-	//sfmt.Println(count)
-	//<section id="section1">
 
-	trStart := "<div><p>"
+	trStart := "<div class=\"card\">"
 
-	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
-	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
-	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
-	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
+	trLINK := "<b>" + convertInterface(ps.lmap["link"]) + "</b>"
+	trRESP := "Response: " + convertInterface(ps.lmap["response code"]) + " " + convertInterface(ps.lmap["response text"])
+	trSAVED := "Archived"  + convertInterface(ps.lmap["archived"])
+	trFNAME := "Filename: " + convertInterface(ps.lmap["filename"])
+	trSCREEN := "Screenshot: " + convertInterface(ps.lmap["screen shot"])
+	trIAEARLIEST := "<b>IA Earliest:</b> " + convertInterface(ps.lmap["internet archive earliest"])
+	trIALATEST := "<b>IA Latest:</b> " + convertInterface(ps.lmap["internet archive latest"])
+	trIASAVE := "IA Save Link: " + convertInterface(ps.lmap["internet archive save link"])
+	trIARESPCODE := "IA Response Code: " + convertInterface(ps.lmap["internet archive response code"])
+	trIARESPONSETEXT := "IA Response Text: " + convertInterface(ps.lmap["internet archive response text"])
 
-	trEnd := "</p></div>"
+	trEnd := "</div>"
+	trBR := "<br/>"
 
-	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
+	response = response + trStart + trLINK + trBR + trRESP + trBR + trSAVED +
+						trBR + trFNAME + trBR + trSCREEN + trBR + trIAEARLIEST + trBR + trIALATEST +
+						trBR + trIASAVE + trBR + trIARESPCODE + trBR + trIARESPONSETEXT + trBR + trEnd
 
-	fmt.Println(response)
-
-	return response 
-}
-
-func aaformatOutput(ps processLog, response string) string {
-	count++
-	//sfmt.Println(count)
-	//<section id="section1">
-
-	trStart := "<div><pre>"
-
-	trID := ps.js
-
-	trEnd := "</pre></div>"
-
-	response = response + trStart + trID + trEnd
-
-	fmt.Println(response)
+	//fmt.Println(ps.lmap)
 
 	return response 
 }
-
-
-
-func xformatOutput(ps processLog, response string) string {
-	count++
-	//sfmt.Println(count)
-	//<section id="section1">
-
-	trStart := fmt.Sprintf("<article><p>", count)
-
-	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
-	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
-	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
-	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
-
-	trEnd := "</p></article>"
-
-	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
-	return response 
-}
-
-func vformatOutput(ps processLog, response string) string {
-	count++
-	fmt.Println(count)
-	//<section id="section1">
-
-	trStart := fmt.Sprintf("<section id=\"section%d\"><p>", count)
-
-	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
-	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
-	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
-	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
-
-	trEnd := "</p></section>"
-
-	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
-	return response 
-}
-
 
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
