@@ -57,9 +57,17 @@ func convertInterfaceHTML(v interface{}) string {
 	return val
 }
 
+const column2 = `
+ <div class="column2">
+	 <b>screenshot:</b>
+	 <br/><br/>
+    <img class="screenshot" src="https://github.com/exponential-decay/httpreserve/raw/master/src/images/httpreserve-logo.png"/>
+ </div>`
+
 func formatOutput(ps processLog, response string) string {
 
 	trStart := "<div class=\"card\">"
+	trColumn1 := "<div class=\"column1\">"
 
 	trLINK := "<b class=\"record\">httpreserve record: </b><b>" + convertInterfaceHTML(ps.lmap["link"]) + "</b>"
 	trRESP := "Response: " + convertInterfaceHTML(ps.lmap["response code"]) + " " + convertInterfaceHTML(ps.lmap["response text"])
@@ -72,12 +80,13 @@ func formatOutput(ps processLog, response string) string {
 	trIARESPCODE := "IA Response Code: " + convertInterfaceHTML(ps.lmap["internet archive response code"])
 	trIARESPONSETEXT := "IA Response Text: " + convertInterfaceHTML(ps.lmap["internet archive response text"])
 
+	trColumn1End := "</div>"
 	trEnd := "</div>"
 	trBR := "<br/>"
 
-	response = response + trStart + trLINK + trBR + trBR + trRESP + trBR + trSAVED +
+	response = response + trStart + trColumn1 + trLINK + trBR + trBR + trRESP + trBR + trSAVED +
 		trBR + trFNAME + trBR + trSCREEN + trBR + trIAEARLIEST + trBR + trIALATEST +
-		trBR + trIASAVE + trBR + trIARESPCODE + trBR + trIARESPONSETEXT + trBR + trEnd
+		trBR + trIASAVE + trBR + trIARESPCODE + trBR + trIARESPONSETEXT + trBR + trColumn1End + column2 + trEnd
 
 	return response
 }

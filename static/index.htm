@@ -17,10 +17,18 @@
 
   <style type="text/css">
 	/*slider elements*/
-	.card { background: SLATEGREY; color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
+	.card { overflow: auto; background: SLATEGREY; color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
 	div.httpreserve { border-style: groove; height: 350px; line-height: 200%; }	
 	b.record { color: black; }
 	a.httpreservelink { color: white; }
+
+	/*card columns*/
+	div.column1 { float: left; display: inline-block; }
+	div.column2 { float: right; display: inline-block; }
+
+	.column1 { width: 60%; margin:5px; padding: 1em; }
+	.column2 { width: 30%; margin:5px; padding: 1em; }
+	.screenshot { height: 180px; width: 180px; }
 
 	/*other page elements*/
 	html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px }
@@ -31,6 +39,7 @@
 	div.error { background-color: red; color: white; padding-left: 10px; font-weight: bold; }
 	div.push { height: 50px; }
 	div.footer { height: 50px; margin: 0 auto ; width:200px; text-align: center; }
+
   </style>
 
   <script src="static/index.js" type="text/javascript"></script>
@@ -60,13 +69,33 @@
 		<div class="httpreserve slider" id="httpreserve-analysis">
 			&nbsp;
 			<!-- Example -->
-			<!--<div class="card">
-				 <h2>Day 1</h2>
-				 <p>Blah Blah Blah...</p>
-				 <p>Blah Blah Blah...</p>
-				 <p>Blah Blah Blah...</p>
-				 <p>Blah Blah Blah...</p>
-			 </div>-->
+			<div class="card">
+				 <div class="column1">
+						<b class="record">httpreserve record: </b><b><a class='httpreservelink' href='http://www.bbc.co.uk/radio'>http://www.bbc.co.uk/radio</a></b>
+						<br/><br/>
+						Response: 200 OK
+						<br/>
+						Archived: true
+						<br/>
+						Filename: bbc radio
+						<br/>Screenshot: <br/>
+						<b>IA Earliest:</b> <a class='httpreservelink' href='http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/</a>
+						<br/>
+						<b>IA Latest:</b> <a class='httpreservelink' href='http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/</a>
+						<br/>
+						IA Save Link: <a class='httpreservelink' href='http://web.archive.org/save/http://www.bbc.co.uk/radio'>http://web.archive.org/save/http://www.bbc.co.uk/radio</a>
+						<br/>
+						IA Response Code: 200
+						<br/>
+						IA Response Text: OK
+						<br/>
+				 </div>
+				 <div class="column2">
+					 <b>screenshot:</b>
+					 <br/><br/>
+			       <img class="screenshot" src="https://github.com/exponential-decay/httpreserve/raw/master/src/images/httpreserve-logo.png"/>
+				 </div>
+			 </div>
 		</div>
 		<div class="push"></div>
 		</p>
