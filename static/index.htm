@@ -1,60 +1,117 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-	<meta charset="utf-8">
-   <title>httpreserve</title>
+  <title>Slick Playground</title>
+  <meta charset="UTF-8">
+  <link rel="stylesheet" type="text/css" href="static/slick/slick.css">
+  <link rel="stylesheet" type="text/css" href="static/slick/slick-theme.css">
 
-	<link id="favicon" rel="icon" type="image/x-icon" 
-	href="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAYAAABzenr0AAAABm
-	JLR0QA/wD/AP+gvaeTAAAACXBIWXMAAAsTAAALEwEAmpwYAAAA
-	B3RJTUUH4QMZAiAVgKAUZQAAAGlJREFUWMPt1jkSgDAMQ9GYk/
-	vmoqIM4C1qpAPkv5k0NgBYxF2LPAE0rTQADsCZ8WfOjJ9FbOJn
-	EB/xWcTP+AwiGO9FJOM9iGK8hmiK5xDN8RhiKL5FWOJrXm9IMw
-	u9qZNMAAEEEIAOuAEmTWnhcv1r2AAAAABJRU5ErkJggg=="/>
+  <style type="text/css">
+    html, body {
+      margin: 0;
+      padding: 0;
+    }
 
-	<script type="text/javascript" src="static/index.js"></script>
+    * {
+      box-sizing: border-box;
+    }
 
-	<!--https://css-tricks.com/couple-takes-sticky-footer/-->
+    .slider {
+        width: 70%;
+		  height: 90%;
+        margin: 160px auto;
+    }
 
-	<style>
-		html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px }
-		figcaption { font-family: times new roman, arial, verdana; font-size: 22px; font-weight: bold; margin-bottom: 8px; }
-		h4 { font-size: 18px;}
-		th { text-align: left; }
-		div.layout { padding-top: 20px; min-height: 100%; margin: 0 auto ; width:1015px; margin-bottom: -80px; }
-		div.error { background-color: red; color: white; padding-left: 10px; font-weight: bold; }
-		div.push { height: 50px; }
-		div.footer { height: 50px; margin: 0 auto ; width:200px; text-align: center; }
-	</style>
+	 /*.slick-track {
+		width: 700px;
+		height: 300px;
+	 }*/
+
+    .slick-slide {
+      margin: 0px 20px;
+    }
+
+    .slick-slide img {
+      width: 100%;
+    }
+
+    .slick-prev:before,
+    .slick-next:before {
+        color: black;
+    }
+  </style>
+
+  <script src="static/index.js" type="text/javascript"></script>
 
 </head>
-<body onload="javascript:refresh()">	
-	<div class="layout">
-		<p>
-		<center>
-			<figure>
-			  	<figcaption>httpreserve</figcaption>
-				<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
-				vMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPg0KIC
-				A8cGF0aCBkPSJNMCAwdjFoOHYtMWgtOHptNCAybC0zIDNoMnYzaDJ2LTNoMmwtMy0zeiIgLz4NCjwvc3ZnPg==" 
-				width="60px" height="60px" alt="httpreserve"/>
-			</figure>
-		</center>
-		</p>   
-		<h4>httpreserve analysis results:</h4>
-		<p>
-		Analysis results will appear below as the service continues to refresh.
-		<br/>
-		<br/>
-		<div id="httpreserve-error"></div>
-		<div class="analysis" id="httpreserve-analysis"></div>
-		<div class="push"></div>
-		</p>
-	</div>
-	<div class="footer" id="footer">
-		A project by <a href="https://twitter.com/beet_keeper" alt="@beet_keeper on Twitter">@beet_keeper</a>
-		<br/>
-		On GitHub: <a href="https://github.com/exponential-decay/httpreserve-app" alt="httpreserve on GitHub">httpreserve</a>
-	</div>
+<body onload="javascript:refresh();">
+	
+	<div id="httpreserve-error">errors</div>
+
+  <!--  <section class="center slider">-->
+  <div class="httpreserve slider" id="httpreserve-analysis">
+    <div>
+      <img src="http://placehold.it/350x300?text=1">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=2">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=3">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=4">
+    </div>
+    <!--<div>
+      <img src="http://placehold.it/350x300?text=5">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=6">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=7">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=8">
+    </div>
+    <div>
+      <img src="http://placehold.it/350x300?text=9">
+    </div>-->
+  </div>
+
+  <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+  <script src="static/slick/slick.js" type="text/javascript" charset="utf-8"></script>
+
+  <script type="text/javascript">
+    $(document).on('ready', function() {
+      $(".httpreserve").slick({
+        //dots: true,
+        infinite: true,
+        centerMode: true,
+        slidesToShow: 3,
+        slidesToScroll: 1
+      });
+    });
+
+	function updateSlick(content) {
+
+		//let browsing continue
+		var currentSlide = $('.httpreserve').slick('slickCurrentSlide');
+
+		// Add a slide
+		$('.httpreserve').slick('slickAdd', content);		
+		$('.httpreserve').slick('unslick');			
+		$('.httpreserve').slick('reinit');
+		$(".httpreserve").slick({
+		     dots: true,
+		     infinite: true,
+		     centerMode: true,
+		     slidesToShow: 3,
+		     slidesToScroll: 1
+		});
+		$(".httpreserve").slick('slickGoTo', currentSlide, true);
+	}
+  </script>
+
 </body>
-</html> 
+</html>

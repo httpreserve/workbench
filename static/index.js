@@ -10,7 +10,7 @@ function refresh() {
 	}
 }
 
-var timer = 1000;
+var timer = 3000;
 setTimeout(refresh, timer);
 
 // Simple AJAX function to make our demo page nice and clean
@@ -24,7 +24,8 @@ function httpreserve(formMethod) {
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
 			if (xmlhttp.status == 200) {
-				document.getElementById(analysistable).innerHTML = formatRow(xmlhttp.responseText);
+				//document.getElementById(analysistable).innerHTML = formatRow(xmlhttp.responseText);
+				formatRow(xmlhttp.responseText);
 			}
 			else if (xmlhttp.status == 400) {
             document.getElementById(httpreserveError).innerHTML = '<div class="error"><br/>[WARNING] There was an error 400<br/></div><br/>';
@@ -76,7 +77,10 @@ function formatRow(data_arr) {
 		timer = 0
 	}
 
-	content = content + newRow;
-	return tableStart + content + tableEnd + padding;
+	// Add a slide
+	updateSlick(newRow);
+
+	//content = content + newRow;
+	//return tableStart + content + tableEnd + padding;
 }
 
