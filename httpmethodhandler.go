@@ -9,7 +9,7 @@ import (
 
 var complete bool
 var indexlog	int
-const fetchlen = 3		// select data from processedSlices in threes
+const fetchlen = 1		// select data from processedSlices in threes
 
 // For debug, we have this function here just in case we need
 // to take a look at our request headers...
@@ -26,8 +26,9 @@ func min(a, b int) int {
     return b
 }
 
-func formatOutput(ps processLog, response string) string {
+var count int
 
+func tformatOutput(ps processLog, response string) string {
 	trStart := "<tr>"
 
 	trFNAME := "<td>" + convertInterface(ps.lmap["response text"]) + "</td>"
@@ -41,6 +42,84 @@ func formatOutput(ps processLog, response string) string {
 	return response 
 }
 
+func formatOutput(ps processLog, response string) string {
+	count++
+	//sfmt.Println(count)
+	//<section id="section1">
+
+	trStart := "<div><p>"
+
+	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
+	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
+	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
+	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
+
+	trEnd := "</p></div>"
+
+	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
+
+	fmt.Println(response)
+
+	return response 
+}
+
+func aaformatOutput(ps processLog, response string) string {
+	count++
+	//sfmt.Println(count)
+	//<section id="section1">
+
+	trStart := "<div><pre>"
+
+	trID := ps.js
+
+	trEnd := "</pre></div>"
+
+	response = response + trStart + trID + trEnd
+
+	fmt.Println(response)
+
+	return response 
+}
+
+
+
+func xformatOutput(ps processLog, response string) string {
+	count++
+	//sfmt.Println(count)
+	//<section id="section1">
+
+	trStart := fmt.Sprintf("<article><p>", count)
+
+	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
+	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
+	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
+	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
+
+	trEnd := "</p></article>"
+
+	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
+	return response 
+}
+
+func vformatOutput(ps processLog, response string) string {
+	count++
+	fmt.Println(count)
+	//<section id="section1">
+
+	trStart := fmt.Sprintf("<section id=\"section%d\"><p>", count)
+
+	trFNAME := convertInterface(ps.lmap["response text"]) + "<br/>"
+	trVERSION := convertInterface(ps.lmap["analysis version text"]) + "<br/>"
+	trLINK := convertInterface(ps.lmap["link"]) + "<br/>"
+	trID := convertInterface(ps.lmap["archived"]) + "<br/>"
+
+	trEnd := "</p></section>"
+
+	response = response + trStart + trID + trFNAME + trVERSION + trLINK + trEnd
+	return response 
+}
+
+
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
 func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
@@ -52,7 +131,7 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 		response := ""
 		if len(processedSlices) > 0 {
 			if !complete {
-				limit := indexlog + min(fetchlen, len(processedSlices))
+				limit := indexlog + (min(fetchlen, len(processedSlices)))
 				for x := indexlog; x < limit; x++ {
 					fmt.Println(x)
 					if processedSlices[x].complete == true {
@@ -69,6 +148,8 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 					fmt.Fprintf(w, "true," + response)
 				}
 			}
+		} else {
+			fmt.Println("no more data")
 		}
 	}
 }
