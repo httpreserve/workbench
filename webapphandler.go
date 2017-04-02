@@ -21,7 +21,7 @@ type processLog struct {
 	complete bool
 	ls       httpreserve.LinkStats
 	js       string
-	lmap		map[string]interface{}
+	lmap     map[string]interface{}
 }
 
 var serverWG sync.WaitGroup
@@ -63,7 +63,7 @@ func processStats(ch chan string) {
 		// http server...
 		lmap := storeStruct(ls, ce)
 		if len(lmap) > 0 {
-			var ps processLog			
+			var ps processLog
 			ps.js = ce
 			ps.ls = ls
 			ps.lmap = lmap
@@ -84,7 +84,7 @@ func rprocessStats() {
 }
 
 // webappHanlder enables us to establish the web server and create
-// the structures we need to present our data to the user... 
+// the structures we need to present our data to the user...
 func webappHandler(ch chan string) {
 
 	serverWG.Add(1)

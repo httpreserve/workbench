@@ -17,7 +17,7 @@ func makeHash(js string) string {
 }
 
 // convertInterface will help us pipe generic values from
-// the deconstruction of httpreserve.LinkStats to a string for 
+// the deconstruction of httpreserve.LinkStats to a string for
 // storage in BoltDB.
 func convertInterface(v interface{}) string {
 	var val string
@@ -83,10 +83,10 @@ var linkmap = map[string]string{
 	"http://www.bbc.co.uk/":               "bbc home",
 	"http://www.bbc.co.uk/radio":          "bbc radio",
 	"http://www.nationalarchives.gov.uk/": "tna",
-	"http://www.google.com": "",
-	"http://google.com": "",
-	"http://www.exponentialdecay.co.uk": "",
-	"http://www.archive.org": "",
-	"http://perma.cc": "",
-	"http://wikipedia.org": "",
+	"http://www.google.com":               "",
+	"http://google.com":                   "",
+	"http://www.exponentialdecay.co.uk":   "",
+	"http://www.archive.org":              "",
+	"http://perma.cc":                     "",
+	"http://wikipedia.org":                "",
 }

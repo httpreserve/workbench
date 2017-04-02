@@ -16,7 +16,13 @@
   <link rel="stylesheet" type="text/css" href="static/slick/slick-theme.css">
 
   <style type="text/css">
-	.card { background: SLATEGREY; color: #fefefe; padding: 1rem; margin: .8rem; width: 800px; }
+	/*slider elements*/
+	.card { background: SLATEGREY; color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
+	div.httpreserve { border-style: groove; height: 350px; line-height: 200%; }	
+	b.record { color: black; }
+	a.httpreservelink { color: white; }
+
+	/*other page elements*/
 	html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px }
 	figcaption { font-family: times new roman, arial, verdana; font-size: 22px; font-weight: bold; margin-bottom: 8px; }
 	h4 { font-size: 18px;}
@@ -49,29 +55,19 @@
 		<br/>
 		<br/>
 		<div id="httpreserve-error"></div>
-	<div id="httpreserve-error">errors</div>
 
 		<!--  <section class="center slider">-->
 		<div class="httpreserve slider" id="httpreserve-analysis">
-		<div class="card">Placeholder</div>
-		<div class="card">
-			 <h2>Day 1</h2>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
+			&nbsp;
+			<!-- Example -->
+			<!--<div class="card">
+				 <h2>Day 1</h2>
+				 <p>Blah Blah Blah...</p>
+				 <p>Blah Blah Blah...</p>
+				 <p>Blah Blah Blah...</p>
+				 <p>Blah Blah Blah...</p>
+			 </div>-->
 		</div>
-		<!-- Example 
-		 <div class="card">
-			 <h2>Day 1</h2>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
-			 <p>Blah Blah Blah...</p>
-		 </div>
-		-->
-		</div>
-
 		<div class="push"></div>
 		</p>
 	</div>
@@ -89,8 +85,8 @@
       $(".httpreserve").slick({
         //dots: true,
         infinite: true,
-        centerMode: true,
-        slidesToShow: 3,
+        //centerMode: true,
+        slidesToShow: 1,
         slidesToScroll: 1
       });
     });
@@ -109,8 +105,8 @@
 		$(".httpreserve").slick({
 		     //dots: true,
 		     infinite: true,
-		     centerMode: true,
-		     slidesToShow: 3,
+		     //centerMode: true,
+		     slidesToShow: 1,
 		     slidesToScroll: 1
 		});
 		$(".httpreserve").slick('slickGoTo', currentSlide, true);

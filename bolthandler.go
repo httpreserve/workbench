@@ -28,7 +28,7 @@ const boltdir = "db/"
 // For stdout the name of the database
 var boltoutput string
 
-// getNewDBName provides three integers based on the time at 
+// getNewDBName provides three integers based on the time at
 // which we run the code to help us create a hashid name for the db.
 func getNewDBName() []int {
 	t := time.Now()
@@ -66,7 +66,7 @@ func makeIDIndex(kb kval.Kvalboltdb, lmap map[string]interface{}) {
 }
 
 // makeBoltDir will create a database for all BoldDB files generated
-// if the database doesn't already exist. 
+// if the database doesn't already exist.
 func makeBoltDir() {
 	if _, err := os.Stat(boltdir); os.IsNotExist(err) {
 		err := os.Mkdir(boltdir, 0700)
@@ -84,7 +84,7 @@ func boltGetResultContainers(kb kval.Kvalboltdb) []string {
 	var buckets []string
 	q := "GET " + hashIndex
 	res, _ := kval.Query(kb, q)
-	for k, _ := range res.Result {
+	for k := range res.Result {
 		buckets = append(buckets, k)
 	}
 	return buckets
@@ -117,7 +117,7 @@ func boltGetAllRecords(kb kval.Kvalboltdb) []map[string]string {
 }
 
 // boltdbHandler is the primary handler for writing to a BoltDB
-// from our httpreserve results rsets. 
+// from our httpreserve results rsets.
 func boltdbHandler(ch chan string) {
 	boltname := configureHashID()
 	makeBoltDir()
