@@ -4,7 +4,8 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httputil"
-	"strings"
+	"strings"	
+	"net/url"
 )
 
 var complete bool
@@ -27,9 +28,23 @@ func min(a, b int) int {
 	return b
 }
 
+var savecount int
+
 // create a link that enables HTTPreserve to manage a
 func makeSaveRequest(v interface{}) string {
-	var val = "<a action='abcdefg' href='#save'>abc</a>"
+	var val string
+	t := fmt.Sprintf("%s",v)
+	var varname = fmt.Sprintf("%s", url.QueryEscape(t))
+	switch v.(type) {
+	case string:
+		if v != "" {
+			val = fmt.Sprintf("%s", v)
+			val = "<a target='_blank' href='javascript:void(0);' onclick='javascript:saveToInternetArchive('" + varname + "');'>" + val + "</a>"
+		}
+	}
+
+	fmt.Println(val)
+
 	return val
 }
 
@@ -75,7 +90,9 @@ func formatOutput(ps processLog, response string) string {
 
 	trLINK := "<b class=\"record\">httpreserve record: </b><b>" + convertInterfaceHTML(ps.lmap["link"]) + "</b>"
 	trRESP := "Response: " + convertInterfaceHTML(ps.lmap["response code"]) + " " + convertInterfaceHTML(ps.lmap["response text"])
-	trSAVED := "Archived: " + convertInterfaceHTML(ps.lmap["archived"])
+
+	trSAVED := "Archived: " + "<span id='httpreserve-saved'>" + convertInterfaceHTML(ps.lmap["archived"]) + "</span>"
+
 	trFNAME := "Filename: " + convertInterfaceHTML(ps.lmap["filename"])
 	trSCREEN := "Screenshot: " + convertInterfaceHTML(ps.lmap["screen shot"])
 	trIAEARLIEST := "<b>IA Earliest:</b> " + convertInterfaceHTML(ps.lmap["internet archive earliest"])
