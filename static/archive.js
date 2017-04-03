@@ -4,8 +4,9 @@
 // Simple AJAX function to make our demo page nice and clean
 function saveToInternetArchive(saveLink) {
 
-	/*var iaSaved = "httpreserve-saved";
-   var method = post;
+	var iaSaved = "httpreserve-saved";
+	var httpreserveError = "httpreserve-error"; 
+   var method = "post";
 
 	var xmlhttp = new XMLHttpRequest();
 	xmlhttp.onreadystatechange = function() {
@@ -38,5 +39,5 @@ function saveToInternetArchive(saveLink) {
       return;
    }
    
-   document.getElementById("httpreserve-analysis").innerHTML = '[WARNING] issue parsing the form in JavaScript';*/
+   document.getElementById("httpreserve-analysis").innerHTML = '[WARNING] issue parsing the form in JavaScript';
 }

@@ -50,6 +50,10 @@ var processedSlices []processLog
 func processStats(ch chan string) {
 	defer serverWG.Done()
 
+	// Pause to initialize the programme first and then let we
+	// can begin polling websites...
+	time.Sleep(1 * time.Second)
+
 	var ls httpreserve.LinkStats
 
 	for range linkmap {
@@ -78,7 +82,7 @@ func processStats(ch chan string) {
 
 var clock string
 
-func rprocessStats() {
+func clockOut() {
 	t := time.Now()
 	clock = t.Format("Mon Jan _2 15:04:05 2006")
 }

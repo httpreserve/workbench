@@ -15,6 +15,11 @@ func httpreserveapp(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Function to handle calls to save a page to internet archive
+func iaSaveApp(w http.ResponseWriter, r *http.Request) {
+	fmt.Fprintln(w, "Saving to the internet archive.")
+}
+
 // 404 response handler for all non supported function
 func notFound(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/plain; charset=utf-8")
@@ -90,6 +95,7 @@ func configureDefault() http.Handler {
 
 	//Routes and handlers...
 	h.HandleFunc("/httpreserve", httpreserveapp)
+	h.HandleFunc("/save", iaSaveApp)
 	h.HandleFunc("/", indexhandler)
 	h.Handle("/static/", http.StripPrefix("/static/", fs))
 

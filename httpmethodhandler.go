@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"strings"	
-	"net/url"
 )
 
 var complete bool
@@ -33,18 +32,15 @@ var savecount int
 // create a link that enables HTTPreserve to manage a
 func makeSaveRequest(v interface{}) string {
 	var val string
-	t := fmt.Sprintf("%s",v)
-	var varname = fmt.Sprintf("%s", url.QueryEscape(t))
+	id := fmt.Sprintf("%d", savecount)
 	switch v.(type) {
 	case string:
 		if v != "" {
 			val = fmt.Sprintf("%s", v)
-			val = "<a target='_blank' href='javascript:void(0);' onclick='javascript:saveToInternetArchive('" + varname + "');'>" + val + "</a>"
+			val = "<a id=saveLink" + id + " target='_blank' href='javascript:saveToInternetArchive(\"" + val + "\");'>" + val + "</a>"
 		}
 	}
-
-	fmt.Println(val)
-
+	savecount++
 	return val
 }
 
