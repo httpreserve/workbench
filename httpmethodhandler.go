@@ -27,6 +27,12 @@ func min(a, b int) int {
 	return b
 }
 
+// create a link that enables HTTPreserve to manage a
+func makeSaveRequest(v interface{}) string {
+	var val = "<a action='abcdefg' href='#save'>abc</a>"
+	return val
+}
+
 // convertInterface will help us pipe generic values from
 // the deconstruction of httpreserve.LinkStats to a string for
 // storage in BoltDB.
@@ -39,9 +45,8 @@ func convertInterfaceHTML(v interface{}) string {
 		} else {
 			val = ""
 		}
-
 		if strings.Contains(val, "http") {
-			val = "<a class='httpreservelink' href='" + val + "'>" + val + "</a>"
+			val = "<a target='_blank' class='httpreservelink' href='" + val + "'>" + val + "</a>"
 		}
 	case int:
 		val = fmt.Sprintf("%d", v)
@@ -53,7 +58,6 @@ func convertInterfaceHTML(v interface{}) string {
 			val = "false"
 		}
 	}
-
 	return val
 }
 
@@ -76,7 +80,9 @@ func formatOutput(ps processLog, response string) string {
 	trSCREEN := "Screenshot: " + convertInterfaceHTML(ps.lmap["screen shot"])
 	trIAEARLIEST := "<b>IA Earliest:</b> " + convertInterfaceHTML(ps.lmap["internet archive earliest"])
 	trIALATEST := "<b>IA Latest:</b> " + convertInterfaceHTML(ps.lmap["internet archive latest"])
-	trIASAVE := "IA Save Link: " + convertInterfaceHTML(ps.lmap["internet archive save link"])
+
+	trIASAVE := "IA Save Link: " + makeSaveRequest(ps.lmap["internet archive save link"])
+
 	trIARESPCODE := "IA Response Code: " + convertInterfaceHTML(ps.lmap["internet archive response code"])
 	trIARESPONSETEXT := "IA Response Text: " + convertInterfaceHTML(ps.lmap["internet archive response text"])
 
