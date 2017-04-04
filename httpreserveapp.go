@@ -25,8 +25,11 @@ var (
 	//webapp config
 	port string
 
-	//testing
-	test bool
+	//list processing
+	list string
+
+	//throttle
+	linkThrottle = 4
 )
 
 func init() {
@@ -45,9 +48,6 @@ func init() {
 	//retireve stats from web service
 	flag.BoolVar(&remote, "remote", false, "Send requests to remote connection.")
 
-	//testing flags for testing whatever we're working on at present
-	flag.BoolVar(&test, "test", false, "use test function while developing functionality.")
-
 	//output method flags
 	flag.BoolVar(&boltdb, "bolt", false, "Output to static BoltDB.")
 	flag.BoolVar(&jsonout, "json", false, "Output to JSON.")
@@ -55,6 +55,9 @@ func init() {
 
 	//other config parameters
 	flag.StringVar(&port, "port", "", "Port to use for httpreserve webapp.")
+
+	//create a list handler...
+	flag.StringVar(&list, "list", "", "use test function while developing functionality.")
 }
 
 func demosetup() {
@@ -84,6 +87,7 @@ func getRemoteLink() {
 }
 
 func libLink(link string, linklabel string) string {
+
 	ls, err := httpreserve.GenerateLinkStats(link, linklabel)
 	if err != nil {
 		log.Println("Error retrieving linkstat:", err)

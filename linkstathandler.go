@@ -78,17 +78,3 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 
 	return lmap
 }
-
-//for now, for testing...
-var linkmap = map[string]string{
-	"http://www.bbc.co.uk/news":           "bbc news",
-	"http://www.bbc.co.uk/":               "bbc home",
-	"http://www.bbc.co.uk/radio":          "bbc radio",
-	"http://www.nationalarchives.gov.uk/": "tna",
-	"http://www.google.com":               "",
-	"http://google.com":                   "",
-	"http://www.exponentialdecay.co.uk":   "",
-	"http://www.archive.org":              "",
-	"http://perma.cc":                     "",
-	"http://wikipedia.org":                "",
-}
