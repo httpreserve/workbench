@@ -20,7 +20,7 @@ func listHandler(outputHandler func(ch chan string)) {
 
 	for l, f := range links {
 		go channelLocalLink(l, f, ch)
-		time.Sleep(100 * time.Millisecond) //TODO: remove when throttling issues are solved
+		time.Sleep(300 * time.Millisecond) //TODO: remove when throttling issues are solved
 	}
 	outputHandler(ch)
 }
@@ -30,7 +30,7 @@ func getList() (map[string]string, error) {
 	newlist := make(map[string]string)
 	if list == "" {
 		return linkmap, nil
-	} 
+	}
 	newlist, err = readFile(list)
 	return newlist, err
 }
