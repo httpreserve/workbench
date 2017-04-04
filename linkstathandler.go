@@ -59,6 +59,8 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 
 	lmap["id"] = id
 	lmap["filename"] = ls.FileName
+	lmap["content-type"] = ls.ContentType
+	lmap["title"] = ls.Title
 	lmap["analysis version number"] = ls.AnalysisVersionNumber
 	lmap["analysis version text"] = ls.AnalysisVersionText
 	lmap["link"] = ls.Link

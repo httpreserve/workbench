@@ -52,7 +52,7 @@ func processStats(ch chan string) {
 
 	// Pause to initialize the programme first and then let we
 	// can begin polling websites...
-	time.Sleep(1 * time.Second)
+	time.Sleep(2 * time.Second)
 
 	var ls httpreserve.LinkStats
 

@@ -20,6 +20,8 @@ func prettyRequest(w http.ResponseWriter, r *http.Request) {
 	return
 }
 
+// Min function for ints where Golang standard only handles
+// int64...
 func min(a, b int) int {
 	if a < b {
 		return a
@@ -27,6 +29,7 @@ func min(a, b int) int {
 	return b
 }
 
+// make an id for the HTML elements we output...
 var savecount int
 
 // create a link that enables HTTPreserve to manage a
@@ -37,7 +40,7 @@ func makeSaveRequest(v interface{}) string {
 	case string:
 		if v != "" {
 			val = fmt.Sprintf("%s", v)
-			val = "<a id=saveLink" + id + " target='_blank' href='javascript:saveToInternetArchive(\"" + val + "\");'>" + val + "</a>"
+			val = "<a class='httpreservelink' id=saveLink" + id + " target='_blank' href='javascript:saveToInternetArchive(\"" + val + "\");'>" + val + "</a>"
 		}
 	}
 	savecount++
@@ -57,7 +60,7 @@ func convertInterfaceHTML(v interface{}) string {
 			val = ""
 		}
 		if strings.Contains(val, "http") {
-			val = "<a target='_blank' class='httpreservelink' href='" + val + "'>" + val + "</a>"
+			val = "<a class='httpreservelink' target='_blank' href='" + val + "'>" + val + "</a>"
 		}
 	case int:
 		val = fmt.Sprintf("%d", v)
@@ -89,8 +92,14 @@ func formatOutput(ps processLog, response string) string {
 
 	trSAVED := "Archived: " + "<span id='httpreserve-saved'>" + convertInterfaceHTML(ps.lmap["archived"]) + "</span>"
 
-	trFNAME := "Filename: " + convertInterfaceHTML(ps.lmap["filename"])
-	trSCREEN := "Screenshot: " + convertInterfaceHTML(ps.lmap["screen shot"])
+	trFNAME := "<b>Filename:</b> " + convertInterfaceHTML(ps.lmap["filename"])
+
+	trCONTENTTYPE := "Content Type: " + convertInterfaceHTML(ps.lmap["content-type"])
+	trTITLE := "Title: " + convertInterfaceHTML(ps.lmap["title"])
+
+	/* Placeholder for screenshot output when the service works for us... */
+	// trSCREEN := "Screenshot: " + convertInterfaceHTML(ps.lmap["screen shot"])
+
 	trIAEARLIEST := "<b>IA Earliest:</b> " + convertInterfaceHTML(ps.lmap["internet archive earliest"])
 	trIALATEST := "<b>IA Latest:</b> " + convertInterfaceHTML(ps.lmap["internet archive latest"])
 
@@ -104,7 +113,7 @@ func formatOutput(ps processLog, response string) string {
 	trBR := "<br/>"
 
 	response = response + trStart + trColumn1 + trLINK + trBR + trBR + trRESP + trBR + trSAVED +
-		trBR + trFNAME + trBR + trSCREEN + trBR + trIAEARLIEST + trBR + trIALATEST +
+		trBR + trFNAME + trBR + trCONTENTTYPE + trBR + trTITLE + trBR + trIAEARLIEST + trBR + trIALATEST +
 		trBR + trIASAVE + trBR + trIARESPCODE + trBR + trIARESPONSETEXT + trBR + trColumn1End + column2 + trEnd
 
 	return response
@@ -133,9 +142,9 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				}
 
 				if complete {
-					fmt.Fprintf(w, "false,"+response)
+					fmt.Fprintf(w, "false•"+response)
 				} else {
-					fmt.Fprintf(w, "true,"+response)
+					fmt.Fprintf(w, "true•"+response)
 				}
 			}
 		}

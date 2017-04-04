@@ -59,28 +59,25 @@ var content = ""
 // Function to fomrat the data output by the server when it is received
 function formatRow(data_arr) {
 
-	var tableStart = "<table><th>time</th>"
-	var tableEnd = "</table>"
-	var padding = "<br/><br/><br/><br/>"
+	var tableStart = "<table><th>time</th>";
+	var tableEnd = "</table>";
+	var padding = "<br/><br/><br/><br/>";
 
-	var arr = data_arr.split(",", 2)
-	var newRow = ""
+	var arr = data_arr.split("•", 2);
+	var newRow = "";
 
 	if (data_arr.length > 0) {	
 		newRow = arr[1];
 	} else {
-		timer = 0
-		return ""
+		timer = 0;
+		return "";
 	}
 
 	if (arr[0] == "false") {
-		timer = 0
+		timer = 0;
 	}
 
 	// Add a slide
 	updateSlick(newRow);
-
-	//content = content + newRow;
-	//return tableStart + content + tableEnd + padding;
 }
 
