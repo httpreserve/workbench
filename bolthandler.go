@@ -58,7 +58,7 @@ func configureHashID() string {
 // associated with the lmap passed to the function (a deconstructed LinkStats)
 func makeIDIndex(kb kval.Kvalboltdb, lmap map[string]interface{}) {
 	for k, v := range lmap {
-		_, err := kval.Query(kb, "INS "+hashIndex+" >> "+convertInterface(lmap["id"])+" >>>> "+k+" :: "+convertInterface(v))
+		_, err := kval.Query(kb, "INS "+ convertInterface(lmap["response code"]) + ">>" + convertInterface(lmap["link"]) +" >>>> "+k+" :: "+convertInterface(v))
 		if err != nil {
 			fmt.Fprintln(os.Stderr, err)
 		}
