@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/exponential-decay/httpreserve"
+	"github.com/httpreserve/httpreserve"
 	"os"
 	"sync"
 	"time"

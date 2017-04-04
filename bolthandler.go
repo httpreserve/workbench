@@ -3,7 +3,7 @@ package main
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/exponential-decay/httpreserve"
+	"github.com/httpreserve/httpreserve"
 	kval "github.com/kval-access-language/kval-boltdb"
 	"github.com/speps/go-hashids"
 	"os"

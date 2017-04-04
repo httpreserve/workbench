@@ -3,7 +3,7 @@ package main
 import (
 	"flag"
 	"fmt"
-	"github.com/exponential-decay/httpreserve"
+	"github.com/httpreserve/httpreserve"
 	"log"
 	"os"
 )

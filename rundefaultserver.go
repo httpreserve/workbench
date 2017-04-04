@@ -2,7 +2,7 @@ package main
 
 import (
 	"fmt"
-	"github.com/exponential-decay/httpreserve"
+	"github.com/httpreserve/httpreserve"
 	"net/http"
 	"os"
 	"os/exec"

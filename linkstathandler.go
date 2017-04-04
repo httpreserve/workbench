@@ -3,7 +3,7 @@ package main
 import (
 	"crypto/md5"
 	"fmt"
-	"github.com/exponential-decay/httpreserve"
+	"github.com/httpreserve/httpreserve"
 )
 
 var structids []string
