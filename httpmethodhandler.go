@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"net/http"
 	"net/http/httputil"
-	"strings"	
+	"strings"
 )
 
 var complete bool
