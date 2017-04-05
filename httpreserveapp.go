@@ -106,7 +106,13 @@ func getLocalLink() {
 func programrunner() {
 
 	if jsonout {
+		//output JSON header
+		fmt.Fprintf(os.Stdout, "%s", outputJSONHeader())
+
 		listHandler(jsonHandler)
+		
+		//output JSON footer
+		fmt.Fprintf(os.Stdout, "%s", outputJSONFooter())
 		return
 	}
 

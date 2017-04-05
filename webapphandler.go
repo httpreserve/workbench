@@ -47,7 +47,7 @@ func webappRun() {
 
 var processedSlices []processLog
 
-func processStats(ch chan string) {
+func processStats(ce string) {
 	defer serverWG.Done()
 
 	// Pause to initialize the programme first and then let we
@@ -56,8 +56,8 @@ func processStats(ch chan string) {
 
 	var ls httpreserve.LinkStats
 
-	for range linkmap {
-		ce := <-ch // json from channel
+	//for range linkmap {
+		//ce := <-ch // json from channel
 		err := json.Unmarshal([]byte(ce), &ls)
 		if err != nil {
 			fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
@@ -73,7 +73,7 @@ func processStats(ch chan string) {
 			ps.lmap = lmap
 			processedSlices = append(processedSlices, ps)
 		}
-	}
+	//}
 
 	var ps processLog
 	ps.complete = true
@@ -89,7 +89,7 @@ func clockOut() {
 
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
-func webappHandler(ch chan string) {
+func webappHandler(ch string) {
 
 	serverWG.Add(1)
 	go webappRun()

@@ -8,9 +8,11 @@ import (
 	"time"
 )
 
+var linkLen int
+
 // list handler to help us kick off some go channels
 // we pass a first class function to help route our output
-func listHandler(outputHandler func(ch chan string)) {
+func listHandler(outputHandler func(ch string)) {
 	ch := make(chan string)
 
 	links, err := getList()
@@ -18,11 +20,17 @@ func listHandler(outputHandler func(ch chan string)) {
 		fmt.Fprintf(os.Stderr, "error reading file %s\n", err.Error())
 	}
 
+	linkLen = len(links)
 	for l, f := range links {
 		go channelLocalLink(l, f, ch)
+
+		s := <-ch
+
+		outputHandler(s)
+
+		//pause: TODO: Find a better pattern...
 		time.Sleep(300 * time.Millisecond) //TODO: remove when throttling issues are solved
 	}
-	outputHandler(ch)
 }
 
 func getList() (map[string]string, error) {
