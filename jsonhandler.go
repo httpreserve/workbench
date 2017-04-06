@@ -36,10 +36,10 @@ func jsonHandler(ce string) {
 	//output JSON body
 	//var count int
 	//for range linkmap {
-		//count++
-		//ce := <-ch
-	
-	jsonCount++
+	//count++
+	//ce := <-ch
+
+	//jsonCount++
 	if ce != "" {
 		if jsonCount < linkLen {
 			fmt.Print(ce + ",")
@@ -49,7 +49,7 @@ func jsonHandler(ce string) {
 		}
 	}
 
-	fmt.Fprintf(os.Stderr, "%d, %d\n", jsonCount, linkLen)
+	//fmt.Fprintf(os.Stderr, "%d, %d\n", jsonCount, linkLen)
 
 	//if count < len(linkmap) {
 	//mt.Println(",")

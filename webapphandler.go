@@ -57,22 +57,22 @@ func processStats(ce string) {
 	var ls httpreserve.LinkStats
 
 	//for range linkmap {
-		//ce := <-ch // json from channel
-		err := json.Unmarshal([]byte(ce), &ls)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
-		}
+	//ce := <-ch // json from channel
+	err := json.Unmarshal([]byte(ce), &ls)
+	if err != nil {
+		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+	}
 
-		// retrieve a map from the structure and write it out to the
-		// http server...
-		lmap := storeStruct(ls, ce)
-		if len(lmap) > 0 {
-			var ps processLog
-			ps.js = ce
-			ps.ls = ls
-			ps.lmap = lmap
-			processedSlices = append(processedSlices, ps)
-		}
+	// retrieve a map from the structure and write it out to the
+	// http server...
+	lmap := storeStruct(ls, ce)
+	if len(lmap) > 0 {
+		var ps processLog
+		ps.js = ce
+		ps.ls = ls
+		ps.lmap = lmap
+		processedSlices = append(processedSlices, ps)
+	}
 	//}
 
 	var ps processLog

@@ -90,8 +90,8 @@ func libLink(link string, linklabel string) string {
 
 	ls, err := httpreserve.GenerateLinkStats(link, linklabel)
 	if err != nil {
+		// httpreserve lib will still return a LinkStats struct to unmarshall
 		log.Println("Error retrieving linkstat:", err)
-		return ""
 	}
 	js := httpreserve.MakeLinkStatsJSON(ls)
 	return js
@@ -110,7 +110,7 @@ func programrunner() {
 		fmt.Fprintf(os.Stdout, "%s", outputJSONHeader())
 
 		listHandler(jsonHandler)
-		
+
 		//output JSON footer
 		fmt.Fprintf(os.Stdout, "%s", outputJSONFooter())
 		return

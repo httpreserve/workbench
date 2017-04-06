@@ -29,7 +29,7 @@ func listHandler(outputHandler func(ch string)) {
 		outputHandler(s)
 
 		//pause: TODO: Find a better pattern...
-		time.Sleep(300 * time.Millisecond) //TODO: remove when throttling issues are solved
+		time.Sleep(100 * time.Millisecond) //TODO: remove when throttling issues are solved
 	}
 }
 
@@ -56,7 +56,7 @@ func readFile(l string) (map[string]string, error) {
 	for scanner.Scan() {
 		split := strings.Split(scanner.Text(), ",")
 		if len(split) != 2 {
-			fmt.Fprint(os.Stderr, "ignoring: issue reading string from file: %s\n", scanner.Text())
+			fmt.Fprintf(os.Stderr, "ignoring: issue reading string from file: %s\n", scanner.Text())
 		} else {
 			newlist[strings.Trim(split[1], " ")] = strings.Trim(split[0], " ")
 		}
