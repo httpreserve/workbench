@@ -118,7 +118,7 @@ func boltGetAllRecords(kb kval.Kvalboltdb) []map[string]string {
 
 var kb kval.Kvalboltdb
 
-func openBolt() {
+func openKVALBolt() {
 	var err error
 	boltname := configureHashID()
 	makeBoltDir()
@@ -131,7 +131,7 @@ func openBolt() {
 	}
 }
 
-func closeBolt() {
+func closeKVALBolt() {
 	kval.Disconnect(kb)
 }
 
