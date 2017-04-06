@@ -117,6 +117,9 @@ func programrunner() {
 	}
 
 	if boltdb {
+		openBolt()
+		defer closeBolt()
+		fmt.Fprintf(os.Stdout, "Database will be output to: %s\n", boltoutput)
 		listHandler(boltdbHandler)
 		return
 	}

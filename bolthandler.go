@@ -116,26 +116,34 @@ func boltGetAllRecords(kb kval.Kvalboltdb) []map[string]string {
 	return records
 }
 
-// boltdbHandler is the primary handler for writing to a BoltDB
-// from our httpreserve results rsets.
-func boltdbHandler(ce string) {
+var kb kval.Kvalboltdb
+
+func openBolt() {
+	var err error
 	boltname := configureHashID()
 	makeBoltDir()
 
 	boltoutput = boltdir + "HP_" + boltname + ".bolt"
-	kb, err := kval.Connect(boltoutput)
+	kb, err = kval.Connect(boltoutput)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error opening bolt database: %+v\n", err)
 		os.Exit(1)
 	}
-	defer kval.Disconnect(kb)
-	fmt.Fprintf(os.Stdout, "Database will be output to: %s\n", boltoutput)
+}
+
+func closeBolt() {
+	kval.Disconnect(kb)
+}
+
+// boltdbHandler is the primary handler for writing to a BoltDB
+// from our httpreserve results rsets.
+func boltdbHandler(ce string) {
 
 	var ls httpreserve.LinkStats
 
 	//for range linkmap {
 	//ce := <-ch // json from channel
-	err = json.Unmarshal([]byte(ce), &ls)
+	err := json.Unmarshal([]byte(ce), &ls)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
 	}
