@@ -20,6 +20,7 @@ var (
 	//output methods
 	boltdb  bool
 	jsonout bool
+	csvout bool
 	webapp  bool
 
 	//webapp config
@@ -51,6 +52,7 @@ func init() {
 	//output method flags
 	flag.BoolVar(&boltdb, "bolt", false, "Output to static BoltDB.")
 	flag.BoolVar(&jsonout, "json", false, "Output to JSON.")
+	flag.BoolVar(&csvout, "csv", false, "Output to CSV.")	
 	flag.BoolVar(&webapp, "webapp", false, "Output for analysis via webapp.")
 
 	//other config parameters
@@ -90,8 +92,7 @@ func libLink(link string, linklabel string) string {
 
 	ls, err := httpreserve.GenerateLinkStats(link, linklabel)
 	if err != nil {
-		// httpreserve lib will still return a LinkStats struct to unmarshall
-		log.Println("Error retrieving linkstat:", err)
+		log.Println("Error retrieving linkstat JSON may be incorrect:", err)
 	}
 	js := httpreserve.MakeLinkStatsJSON(ls)
 	return js
@@ -106,20 +107,20 @@ func getLocalLink() {
 func programrunner() {
 
 	if jsonout {
-		//output JSON header
 		fmt.Fprintf(os.Stdout, "%s", outputJSONHeader())
-
 		listHandler(jsonHandler)
-
-		//output JSON footer
 		fmt.Fprintf(os.Stdout, "%s", outputJSONFooter())
 		return
 	}
 
+	if csvout {
+		//output JSON header
+		fmt.Fprintf(os.Stdout, "%s", outputCSVHeader())
+		listHandler(csvHandler)
+		return
+	}
+
 	if boltdb {
-		openKVALBolt()
-		defer closeKVALBolt()
-		fmt.Fprintf(os.Stdout, "Database will be output to: %s\n", boltoutput)
 		listHandler(boltdbHandler)
 		return
 	}
