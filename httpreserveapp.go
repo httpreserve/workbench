@@ -20,7 +20,7 @@ var (
 	//output methods
 	boltdb  bool
 	jsonout bool
-	csvout bool
+	csvout  bool
 	webapp  bool
 
 	//webapp config
@@ -52,7 +52,7 @@ func init() {
 	//output method flags
 	flag.BoolVar(&boltdb, "bolt", false, "Output to static BoltDB.")
 	flag.BoolVar(&jsonout, "json", false, "Output to JSON.")
-	flag.BoolVar(&csvout, "csv", false, "Output to CSV.")	
+	flag.BoolVar(&csvout, "csv", false, "Output to CSV.")
 	flag.BoolVar(&webapp, "webapp", false, "Output for analysis via webapp.")
 
 	//other config parameters
