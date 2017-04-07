@@ -26,6 +26,13 @@ type processLog struct {
 
 var serverWG sync.WaitGroup
 
+var clock string
+
+func clockOut() {
+	t := time.Now()
+	clock = t.Format("Mon Jan _2 15:04:05 2006")
+}
+
 // webapprun lets us start the server for the user to access
 func webappRun() {
 	defer serverWG.Done()
@@ -43,60 +50,93 @@ func webappRun() {
 	if err != nil {
 		fmt.Fprintln(os.Stderr, err)
 	}
+
 }
 
 var processedSlices []processLog
 
-func processStats(ce string) {
+var copyfrom int
+var copyto int
+
+func sprocesslinkpool() {
 	defer serverWG.Done()
 
-	// Pause to initialize the programme first and then let we
-	// can begin polling websites...
-	time.Sleep(2 * time.Second)
+	var tmp []string
+
+	fmt.Println(len(tmp), copyfrom, copyto)
+
+	copyto = len(linkpool)
+
+	fmt.Println(len(tmp), copyfrom, copyto)
+
+	if copyto > 0 && copyto > copyfrom {
+		tmp = make([]string, copyto-copyfrom)
+		copy(tmp, linkpool[copyfrom:copyto])
+		copyfrom = copyto
+	}
+
+	fmt.Println(len(tmp), copyfrom, copyto)
+	fmt.Println(len(linkpool))
+}
+
+func processlinkpool() {
+	defer serverWG.Done()
+
+	//protect memory by copying only what we know we've got
+	var res []string
+	copyto = len(linkpool)
+	if copyto > 0 && copyto > copyfrom {
+		res = make([]string, copyto-copyfrom)
+		copy(res, linkpool[copyfrom:copyto])
+		copyfrom = copyto
+	}
 
 	var ls httpreserve.LinkStats
 
-	//for range linkmap {
-	//ce := <-ch // json from channel
-	err := json.Unmarshal([]byte(ce), &ls)
-	if err != nil {
-		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+	for x := range res {
+		ce := res[x]
+		err := json.Unmarshal([]byte(ce), &ls)
+		if err != nil {
+			fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+		}
+
+		// retrieve a map from the structure and write it out to the
+		// http server...
+		lmap := storeStruct(ls, ce)
+		if len(lmap) > 0 {
+			var ps processLog
+			ps.js = ce
+			ps.ls = ls
+			ps.lmap = lmap
+			processedSlices = append(processedSlices, ps)
+		}
 	}
 
-	// retrieve a map from the structure and write it out to the
-	// http server...
-	lmap := storeStruct(ls, ce)
-	if len(lmap) > 0 {
+	//TODO we have a problem to sort here where we're losing a single
+	//result... get threading working first
+	if copyto == linkLen-1 {
 		var ps processLog
-		ps.js = ce
-		ps.ls = ls
-		ps.lmap = lmap
+		ps.complete = true
 		processedSlices = append(processedSlices, ps)
 	}
-	//}
-
-	var ps processLog
-	ps.complete = true
-	processedSlices = append(processedSlices, ps)
 }
 
-var clock string
+var linkpool []string
 
-func clockOut() {
-	t := time.Now()
-	clock = t.Format("Mon Jan _2 15:04:05 2006")
+func makelinkpool(ch chan string) {
+	defer serverWG.Done()
+	linkpool = append(linkpool, <-ch)
 }
 
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
-func webappHandler(ch string) {
+func webappHandler(ch chan string) {
 
 	serverWG.Add(1)
-	go webappRun()
+	go makelinkpool(ch)
 
 	serverWG.Add(1)
-	go processStats(ch)
+	go processlinkpool()
 
-	serverWG.Wait()
 	return
 }

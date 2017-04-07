@@ -126,7 +126,10 @@ func programrunner() {
 	}
 
 	if webapp {
+		serverWG.Add(1)
+		go webappRun()
 		listHandler(webappHandler)
+		serverWG.Wait()
 		return
 	}
 

@@ -12,7 +12,7 @@ var linkLen int
 
 // list handler to help us kick off some go channels
 // we pass a first class function to help route our output
-func listHandler(outputHandler func(ch string)) {
+func listHandler(outputHandler func(ch chan string)) {
 	ch := make(chan string)
 
 	links, err := getList()
@@ -24,9 +24,7 @@ func listHandler(outputHandler func(ch string)) {
 	for l, f := range links {
 		go channelLocalLink(l, f, ch)
 
-		s := <-ch
-
-		outputHandler(s)
+		outputHandler(ch)
 
 		//pause: TODO: Find a better pattern...
 		time.Sleep(100 * time.Millisecond) //TODO: remove when throttling issues are solved

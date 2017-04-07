@@ -137,12 +137,12 @@ func closeKVALBolt() {
 
 // boltdbHandler is the primary handler for writing to a BoltDB
 // from our httpreserve results rsets.
-func boltdbHandler(ce string) {
+func boltdbHandler(ch chan string) {
 
 	var ls httpreserve.LinkStats
 
 	//for range linkmap {
-	//ce := <-ch // json from channel
+	ce := <-ch // json from channel
 	err := json.Unmarshal([]byte(ce), &ls)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)

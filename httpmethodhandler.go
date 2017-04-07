@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"log"
 	"net/http"
 	"net/http/httputil"
 	"strings"
@@ -119,6 +120,8 @@ func formatOutput(ps processLog, response string) string {
 	return response
 }
 
+var outputcount int
+
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
 func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
@@ -132,13 +135,13 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 			if !complete {
 				limit := indexlog + (min(fetchlen, len(processedSlices)))
 				for x := indexlog; x < limit; x++ {
-					fmt.Println(x)
 					if processedSlices[x].complete == true {
 						complete = true
 						break
 					}
 					response = formatOutput(processedSlices[x], response)
 					indexlog = x + 1
+					log.Println(indexlog, "of", len(processedSlices), "processed slices")
 				}
 
 				if complete {

@@ -28,7 +28,7 @@ var jsonCount int
 
 // TODO: consider more idiomatic approaches to achieving what we do here,
 // that is, fmt.Println() is not really my approved approach (but it works (agile))
-func jsonHandler(ce string) {
+func jsonHandler(ch chan string) {
 
 	//output JSON header
 	//fmt.Fprintf(os.Stdout, "%s", outputHeader())
@@ -37,7 +37,7 @@ func jsonHandler(ce string) {
 	//var count int
 	//for range linkmap {
 	//count++
-	//ce := <-ch
+	ce := <-ch
 
 	//jsonCount++
 	if ce != "" {

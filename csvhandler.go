@@ -44,9 +44,11 @@ func outputCSVRow(lmap map[string]interface{}) string {
 
 // TODO: consider more idiomatic approaches to achieving what we do here,
 // that is, fmt.Println() is not really my approved approach (but it works (agile))
-func csvHandler(ce string) {
+func csvHandler(ch chan string) {
 
 	var ls httpreserve.LinkStats
+
+	ce := <-ch
 
 	err := json.Unmarshal([]byte(ce), &ls)
 	if err != nil {
