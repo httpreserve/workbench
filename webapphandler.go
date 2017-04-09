@@ -61,33 +61,36 @@ func processlinkpool() {
 
 	res := tsdatacopy(lpcopyfrom, lpcopyto, linkpool)
 
-	var ls httpreserve.LinkStats
+	if len(res) > 0 {
 
-	for x := range res {
-		ce := res[x]
-		err := json.Unmarshal([]byte(ce), &ls)
-		if err != nil {
-			fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+		var ls httpreserve.LinkStats
+
+		for x := range res {
+			ce := res[x]
+			err := json.Unmarshal([]byte(ce), &ls)
+			if err != nil {
+				fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+			}
+
+			// retrieve a map from the structure and write it out to the
+			// http server...
+			lmap := storeStruct(ls, ce)
+			if len(lmap) > 0 {
+				var ps processLog
+				ps.js = ce
+				ps.ls = ls
+				ps.lmap = lmap
+				processedSlices = append(processedSlices, ps)
+			}
 		}
 
-		// retrieve a map from the structure and write it out to the
-		// http server...
-		lmap := storeStruct(ls, ce)
-		if len(lmap) > 0 {
+		//TODO we have a problem to sort here where we're losing a single
+		//result... get threading working first
+		if lpcopyto == linkLen-1 {
 			var ps processLog
-			ps.js = ce
-			ps.ls = ls
-			ps.lmap = lmap
+			ps.complete = true
 			processedSlices = append(processedSlices, ps)
 		}
-	}
-
-	//TODO we have a problem to sort here where we're losing a single
-	//result... get threading working first
-	if lpcopyto == linkLen-1 {
-		var ps processLog
-		ps.complete = true
-		processedSlices = append(processedSlices, ps)
 	}
 }
 

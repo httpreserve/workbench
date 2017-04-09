@@ -121,6 +121,7 @@ func formatOutput(ps processLog, response string) string {
 }
 
 var outputcount int
+var pscopyfrom, pscopyto int
 
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
