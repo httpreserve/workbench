@@ -53,43 +53,13 @@ func webappRun() {
 
 }
 
+var lpcopyfrom, lpcopyto int
 var processedSlices []processLog
-
-var copyfrom int
-var copyto int
-
-func sprocesslinkpool() {
-	defer serverWG.Done()
-
-	var tmp []string
-
-	fmt.Println(len(tmp), copyfrom, copyto)
-
-	copyto = len(linkpool)
-
-	fmt.Println(len(tmp), copyfrom, copyto)
-
-	if copyto > 0 && copyto > copyfrom {
-		tmp = make([]string, copyto-copyfrom)
-		copy(tmp, linkpool[copyfrom:copyto])
-		copyfrom = copyto
-	}
-
-	fmt.Println(len(tmp), copyfrom, copyto)
-	fmt.Println(len(linkpool))
-}
 
 func processlinkpool() {
 	defer serverWG.Done()
 
-	//protect memory by copying only what we know we've got
-	var res []string
-	copyto = len(linkpool)
-	if copyto > 0 && copyto > copyfrom {
-		res = make([]string, copyto-copyfrom)
-		copy(res, linkpool[copyfrom:copyto])
-		copyfrom = copyto
-	}
+	res := tsdatacopy(lpcopyfrom, lpcopyto, linkpool)
 
 	var ls httpreserve.LinkStats
 
@@ -114,7 +84,7 @@ func processlinkpool() {
 
 	//TODO we have a problem to sort here where we're losing a single
 	//result... get threading working first
-	if copyto == linkLen-1 {
+	if lpcopyto == linkLen-1 {
 		var ps processLog
 		ps.complete = true
 		processedSlices = append(processedSlices, ps)
