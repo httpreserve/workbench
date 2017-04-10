@@ -26,11 +26,9 @@ type processLog struct {
 
 var serverWG sync.WaitGroup
 
-var clock string
-
-func clockOut() {
+func clockOut() string {
 	t := time.Now()
-	clock = t.Format("Mon Jan _2 15:04:05 2006")
+	return t.Format("Mon Jan _2 15:04:05 2006")
 }
 
 // webapprun lets us start the server for the user to access
@@ -59,7 +57,7 @@ var processedSlices []processLog
 func processlinkpool() {
 	defer serverWG.Done()
 
-	res := tsdatacopy(lpcopyfrom, lpcopyto, linkpool)
+	res := tsdatacopy(&lpcopyfrom, &lpcopyto, linkpool)
 
 	if len(res) > 0 {
 

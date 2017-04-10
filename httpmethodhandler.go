@@ -120,29 +120,42 @@ func formatOutput(ps processLog, response string) string {
 	return response
 }
 
+var pscopy []processLog
 var outputcount int
-var pscopyfrom, pscopyto int
+var pscopyto int
 
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
 func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 	switch r.Method {
 	case http.MethodGet:
-		fmt.Fprintf(w, "%s", "time,"+clock)
+		fmt.Fprintf(w, "%s", "time,"+clockOut())
 		return
 	case http.MethodPost:
 		response := ""
-		if len(processedSlices) > 0 {
+		processupdate := len(processedSlices)
+
+		// We want to maintain a whole copy of the list in memory to work
+		// from, e.g. to update the indexes of. Do that here.
+		if len(pscopy) < len(processedSlices) {
+			pscopyfrom := 0
+			//pscopy = pldatacopy(&pscopyfrom, &pscopyto, processedSlices)
+			pscopy = pldatacopylen(&pscopyfrom, &pscopyto, processedSlices, 1)
+		}
+
+		if len(pscopy) > 0 {
+
 			if !complete {
-				limit := indexlog + (min(fetchlen, len(processedSlices)))
+				limit := indexlog + (min(fetchlen, len(pscopy)))
 				for x := indexlog; x < limit; x++ {
-					if processedSlices[x].complete == true {
+					if pscopy[x].complete == true {
+						log.Println("received complete signal.")
 						complete = true
 						break
 					}
-					response = formatOutput(processedSlices[x], response)
+					response = formatOutput(pscopy[x], response)
 					indexlog = x + 1
-					log.Println(indexlog, "of", len(processedSlices), "processed slices")
+					log.Println(indexlog, "of", processupdate, "processed slices")
 				}
 
 				if complete {
