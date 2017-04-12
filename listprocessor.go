@@ -27,7 +27,7 @@ func listHandler(outputHandler func(ch chan string)) {
 		outputHandler(ch)
 
 		//pause: TODO: Find a better pattern...
-		time.Sleep(100 * time.Millisecond) //TODO: remove when throttling issues are solved
+		time.Sleep(300 * time.Millisecond) //TODO: remove when throttling issues are solved
 	}
 }
 

@@ -17,7 +17,7 @@
 
   <style type="text/css">
 	/*slider elements*/
-	.card { overflow: auto; background: SLATEGREY; color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
+	.card { overflow: auto; background: #D35289 url('static/texture.gif'); color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
 	div.httpreserve { border-style: groove; height: 350px; line-height: 200%; }	
 	b.record { color: black; }
 	a.httpreservelink { color: white; }
@@ -32,12 +32,13 @@
 
 	/*other page elements*/
 	html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px }
-	figcaption { font-family: times new roman, arial, verdana; font-size: 22px; font-weight: bold; margin-bottom: 8px; }
-	h4 { font-size: 18px;}
+	body { background: #FFFFFF url('static/bgtexture.gif');  }
+	figcaption { font-family: times new roman, arial, verdana; font-size: 20px; font-weight: bold; margin-bottom: 8px; }
+	h4 { font-size: 18px; margin-bottom: -8px; }
 	th { text-align: left; }
 	div.layout { padding-top: 20px; min-height: 100%; margin: 0 auto ; width:1015px; margin-bottom: -80px; }
-	div.error { background-color: red; color: white; padding-left: 10px; font-weight: bold; }
-	div.push { height: 50px; }
+	div.error { background-color: #cc0000; color: white; padding-left: 10px; font-weight: bold; margin-top: -2px; margin-bottom: -2px; }
+	div.push { height: 100px; min-height: 50px; }
 	div.footer { height: 50px; margin: 0 auto ; width:200px; text-align: center; }
 
   </style>
@@ -55,7 +56,7 @@
 				<img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
 				vMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPg0KIC
 				A8cGF0aCBkPSJNMCAwdjFoOHYtMWgtOHptNCAybC0zIDNoMnYzaDJ2LTNoMmwtMy0zeiIgLz4NCjwvc3ZnPg==" 
-				width="60px" height="60px" alt="httpreserve"/>
+				width="50px" height="50px" alt="httpreserve"/>
 			</figure>
 		</center>
 		</p>   
@@ -107,7 +108,7 @@
 		On GitHub: <a href="https://github.com/exponential-decay/httpreserve-app" alt="httpreserve on GitHub">httpreserve</a>
 	</div>
 
-  <script src="https://code.jquery.com/jquery-2.2.0.min.js" type="text/javascript"></script>
+  <script src="static/jquery/jquery-2.2.0.min.js" type="text/javascript"></script>
   <script src="static/slick-lib/slick/slick.js" type="text/javascript" charset="utf-8"></script>
 
   <script type="text/javascript">

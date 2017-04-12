@@ -8,11 +8,6 @@ import (
 	"strings"
 )
 
-var complete bool
-var indexlog int
-
-const fetchlen = 1 // select data from processedSlices in threes
-
 // For debug, we have this function here just in case we need
 // to take a look at our request headers...
 func prettyRequest(w http.ResponseWriter, r *http.Request) {
@@ -124,6 +119,9 @@ var pscopy []processLog
 var outputcount int
 var pscopyto int
 
+var complete = false
+var indexlog int
+
 // Primary handler of all POST or GET requests to httpreserve
 // pretty simple eh?!
 func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
@@ -134,36 +132,43 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 	case http.MethodPost:
 		response := ""
 		processupdate := len(processedSlices)
+		buffersize := len(pscopy)
 
 		// We want to maintain a whole copy of the list in memory to work
 		// from, e.g. to update the indexes of. Do that here.
-		if len(pscopy) < len(processedSlices) {
+		if buffersize < processupdate && indexlog < processupdate {
 			pscopyfrom := 0
-			//pscopy = pldatacopy(&pscopyfrom, &pscopyto, processedSlices)
 			pscopy = pldatacopylen(&pscopyfrom, &pscopyto, processedSlices, 1)
 		}
 
-		if len(pscopy) > 0 {
 
-			if !complete {
-				limit := indexlog + (min(fetchlen, len(pscopy)))
-				for x := indexlog; x < limit; x++ {
-					if pscopy[x].complete == true {
-						log.Println("received complete signal.")
-						complete = true
-						break
-					}
-					response = formatOutput(pscopy[x], response)
-					indexlog = x + 1
-					log.Println(indexlog, "of", processupdate, "processed slices")
+		//ensure neither buffer overruns the other... 
+		if buffersize > 0 && buffersize <= processupdate {
+
+			if !complete && indexlog < processupdate {
+
+				//log.Println(response, pscopy[indexlog].complete, buffersize, processupdate, indexlog)
+
+				if pscopy[indexlog].complete == true {
+					log.Println("received complete signal.")
+					complete = true
 				}
 
-				if complete {
-					fmt.Fprintf(w, "false•"+response)
-				} else {
-					fmt.Fprintf(w, "true•"+response)
-				}
+				response = formatOutput(pscopy[indexlog], response)
+				log.Println(indexlog+1, "of", processupdate, "processed slices")
 			}
+
+			//finished processing what we've got, update indexlog
+			//and only update indexlog if we've not got overunning buffers...
+			indexlog++
 		}
+
+		// Let the client poll, unless a suitable exit condition is found...
+		if complete {
+			log.Println("Signalling client to stop polling.")
+			fmt.Fprintf(w, "false•"+response)
+		} else {
+			fmt.Fprintf(w, "true•"+response)
+		} 
 	}
 }
