@@ -155,7 +155,7 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				}
 
 				response = formatOutput(pscopy[indexlog], response)
-				log.Println(indexlog+1, "of", processupdate, "processed slices")
+				log.Println(indexlog+1, "of", processupdate, "processed slices.", "(" + string(linkLen) + ")")
 			}
 
 			//finished processing what we've got, update indexlog

@@ -23,7 +23,6 @@ func listHandler(outputHandler func(ch chan string)) {
 	linkLen = len(links)
 	for l, f := range links {
 		go channelLocalLink(l, f, ch)
-
 		outputHandler(ch)
 
 		//pause: TODO: Find a better pattern...
