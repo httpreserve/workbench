@@ -103,11 +103,11 @@ func makelinkpool(ch chan string) {
 // the structures we need to present our data to the user...
 func webappHandler(ch chan string) {
 
-	serverWG.Add(1)
-	go makelinkpool(ch)
+	//serverWG.Add(1)
+	//go makelinkpool(ch)
 
-	serverWG.Add(1)
-	go processlinkpool()
+	//serverWG.Add(1)
+	//go processlinkpool()
 
 	return
 }

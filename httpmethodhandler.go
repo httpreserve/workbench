@@ -161,6 +161,8 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 			//finished processing what we've got, update indexlog
 			//and only update indexlog if we've not got overunning buffers...
 			indexlog++
+		} else {
+			log.Println("ND:", indexlog, "of", processupdate, "processed slices.", "(" + string(linkLen) + ")")
 		}
 
 		// Let the client poll, unless a suitable exit condition is found...
