@@ -5,10 +5,6 @@ import (
 	"os"
 )
 
-func channelLocalLink(link string, filename string, ch chan string) {
-	ch <- libLink(link, filename)
-}
-
 func outputJSONHeader() string {
 	var header string
 	header = header + fmt.Sprintf("%s\n", "{")
@@ -28,34 +24,12 @@ var jsonCount int
 
 // TODO: consider more idiomatic approaches to achieving what we do here,
 // that is, fmt.Println() is not really my approved approach (but it works (agile))
-func jsonHandler(ch chan string) {
-
-	//output JSON header
-	//fmt.Fprintf(os.Stdout, "%s", outputHeader())
-
-	//output JSON body
-	//var count int
-	//for range linkmap {
-	//count++
-	ce := <-ch
-
-	//jsonCount++
-	if ce != "" {
-		if jsonCount < linkLen {
-			fmt.Print(ce + ",")
+func jsonHandler(js string) {
+	if js != "" {
+		if jsonCount < linklen {
+			fmt.Fprint(os.Stdout, js + ",")
 		} else {
-			fmt.Print(ce)
-			fmt.Fprintf(os.Stderr, "no comma")
+			fmt.Fprint(os.Stdout, js)
 		}
 	}
-
-	//fmt.Fprintf(os.Stderr, "%d, %d\n", jsonCount, linkLen)
-
-	//if count < len(linkmap) {
-	//mt.Println(",")
-	//}
-	//}
-
-	//output JSON footer
-	//fmt.Fprintf(os.Stdout, "%s", outputFooter())
 }

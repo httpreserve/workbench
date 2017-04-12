@@ -43,22 +43,16 @@ func outputCSVRow(lmap map[string]interface{}) string {
 }
 
 // TODO: consider more idiomatic approaches to achieving what we do here,
-// that is, fmt.Println() is not really my approved approach (but it works (agile))
-func csvHandler(ch chan string) {
-
+// that is, fmt.Println() is not really my approved approach (but it works)
+func csvHandler(js string) {
 	var ls httpreserve.LinkStats
-
-	ce := <-ch
-
-	err := json.Unmarshal([]byte(ce), &ls)
+	err := json.Unmarshal([]byte(js), &ls)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
 	}
 
-	//fmt.Fprintf(os.Stdout, "%v\n", ls)
-
 	// retrieve a map from the structure and write it out to the CSV
-	lmap := storeStruct(ls, ce)
+	lmap := storeStruct(ls, js)
 	if len(lmap) > 0 {
 		fmt.Fprintf(os.Stdout, "%s\n", outputCSVRow(lmap))
 	}

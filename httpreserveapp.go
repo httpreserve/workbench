@@ -88,8 +88,7 @@ func getRemoteLink() {
 	}
 }
 
-func libLink(link string, linklabel string) string {
-
+func getJSONFromLocal(link string, linklabel string) string {
 	ls, err := httpreserve.GenerateLinkStats(link, linklabel)
 	if err != nil {
 		log.Println("Error retrieving linkstat JSON may be incorrect:", err)
@@ -99,7 +98,7 @@ func libLink(link string, linklabel string) string {
 }
 
 func getLocalLink() {
-	js := libLink(link, linklabel)
+	js := getJSONFromLocal(link, linklabel)
 	fmt.Fprintln(os.Stderr, "Using httpreserve libs to retrieve data.")
 	fmt.Fprintf(os.Stdout, "%s", js)
 }
@@ -121,15 +120,22 @@ func programrunner() {
 	}
 
 	if boltdb {
+		openKVALBolt()
+		defer closeKVALBolt()
 		listHandler(boltdbHandler)
 		return
 	}
 
 	if webapp {
-		serverWG.Add(1)
+
+		// start web server and select{} below ensures
+		// main doesn't complete...
 		go webappRun()
+
+		// next we need to get the data from the file...
 		listHandler(webappHandler)
-		serverWG.Wait()
+
+		select{}
 		return
 	}
 

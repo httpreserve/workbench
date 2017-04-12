@@ -155,14 +155,14 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				}
 
 				response = formatOutput(pscopy[indexlog], response)
-				log.Println(indexlog+1, "of", processupdate, "processed slices.", "(" + string(linkLen) + ")")
+				log.Println(indexlog+1, "of", processupdate, "processed slices.", "(" + string(linklen) + ")")
 			}
 
 			//finished processing what we've got, update indexlog
 			//and only update indexlog if we've not got overunning buffers...
 			indexlog++
 		} else {
-			log.Println("ND:", indexlog, "of", processupdate, "processed slices.", "(" + string(linkLen) + ")")
+			log.Println("ND:", indexlog, "of", processupdate, "processed slices.", "(" + string(linklen) + ")")
 		}
 
 		// Let the client poll, unless a suitable exit condition is found...

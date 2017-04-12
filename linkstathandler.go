@@ -48,14 +48,9 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 
 	var lmap = make(map[string]interface{})
 
+	// make an id to help filtering in reports, 
+	// id should be unique to the JSON output
 	id := makeHash(js)
-	for _, y := range structids {
-		if id == y {
-			return lmap
-		}
-	}
-
-	structids = append(structids, id)
 
 	lmap["id"] = id
 	lmap["filename"] = ls.FileName

@@ -6,6 +6,7 @@ import (
 	"github.com/httpreserve/httpreserve"
 	kval "github.com/kval-access-language/kval-boltdb"
 	"github.com/speps/go-hashids"
+	"log"
 	"os"
 	"time"
 )
@@ -135,24 +136,38 @@ func closeKVALBolt() {
 	kval.Disconnect(kb)
 }
 
+var id []string
+
 // boltdbHandler is the primary handler for writing to a BoltDB
 // from our httpreserve results rsets.
-func boltdbHandler(ch chan string) {
+func boltdbHandler(js string) {
 
 	var ls httpreserve.LinkStats
 
-	//for range linkmap {
-	ce := <-ch // json from channel
-	err := json.Unmarshal([]byte(ce), &ls)
+	err := json.Unmarshal([]byte(js), &ls)
 	if err != nil {
 		fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
 	}
 
+	var add = true
+
 	// retrieve a map from the structure and write it out to the
-	// bolt db.
-	lmap := storeStruct(ls, ce)
+	// bolt db. 
+	lmap := storeStruct(ls, js)
 	if len(lmap) > 0 {
 		makeIDIndex(kb, lmap)
+
+		lmapid := convertInterface(lmap["id"])
+		for x := range(id) {
+			if lmapid == id[x] {
+				add = false
+				log.Println("Already seen:", lmap["filename"], lmap["title"])
+				break
+			}				
+		}
+		if add {
+			makeIDIndex(kb, lmap)
+			id = append(id, lmapid)
+		}
 	}
-	//}
 }

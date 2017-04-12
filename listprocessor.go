@@ -5,65 +5,89 @@ import (
 	"fmt"
 	"os"
 	"strings"
-	"time"
+	"sync"
 )
 
-var linkLen int
+var linklen int
 
 // list handler to help us kick off some go channels
 // we pass a first class function to help route our output
-func listHandler(outputHandler func(ch chan string)) {
-	ch := make(chan string)
+func listHandler(outputHandler func(js string)) {
 
-	links, err := getList()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "error reading file %s\n", err.Error())
-	}
+	//fmt.Println("in list handler")
 
-	linkLen = len(links)
-	for l, f := range links {
-		go channelLocalLink(l, f, ch)
-		outputHandler(ch)
+	link := make(chan map[string]string)
+	results := make(chan string)
 
-		//pause: TODO: Find a better pattern...
-		time.Sleep(300 * time.Millisecond) //TODO: remove when throttling issues are solved
-	}
-}
+	wg := new(sync.WaitGroup)
 
-func getList() (map[string]string, error) {
-	var err error
-	newlist := make(map[string]string)
-	if list == "" {
-		return linkmap, nil
-	}
-	newlist, err = readFile(list)
-	return newlist, err
-}
+	// 10 chunks of work..?
+	for w := 0; w <= 20; w++ {
+		wg.Add(1)
+		go getJSON(link, results, wg)
+	} 
 
-func readFile(l string) (map[string]string, error) {
-	newlist := make(map[string]string)
-
-	file, err := os.Open(list)
-	if err != nil {
-		return newlist, err
-	}
-	defer file.Close()
-
-	scanner := bufio.NewScanner(file)
-	for scanner.Scan() {
-		split := strings.Split(scanner.Text(), ",")
-		if len(split) != 2 {
-			fmt.Fprintf(os.Stderr, "ignoring: issue reading string from file: %s\n", scanner.Text())
+	// Create a link map for output to the output handlers
+	go func() {
+		if list == "" {
+			// Use demo list...
+			for k, v := range linkmap {
+				l := make(map[string]string)
+				l[k] = v
+				link <- l
+			}
 		} else {
-			newlist[strings.Trim(split[1], " ")] = strings.Trim(split[0], " ")
+			// Read all the lines in a file...
+			file, err := os.Open(list)
+			if err != nil {
+				fmt.Fprintf(os.Stderr, "Error with scanner: %s\n", err.Error())
+			}
+			defer file.Close()
+
+			scanner := bufio.NewScanner(file)
+			for scanner.Scan() {
+				l := make(map[string]string)
+				split := strings.Split(scanner.Text(), ",")
+				if len(split) != 2 {
+					fmt.Fprintf(os.Stderr, "ignoring: issue reading string from file: %s\n", scanner.Text())
+				} else {
+					l[strings.Trim(split[1], " ")] = strings.Trim(split[0], " ")
+					link <- l
+				}
+			}
+
+			if err := scanner.Err(); err != nil {
+				fmt.Fprintf(os.Stderr, "Error with scanner: %s\n", scanner.Text())
+			}
+		}
+		close(link)
+	}()
+
+	go func() {
+		wg.Wait()
+		close(results)
+	}()
+
+	for js := range results {
+		outputHandler(js)
+	}
+
+	//fmt.Println("out of list handler")
+
+}
+
+func getJSON(link <- chan map[string]string, results chan<- string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	for m := range link {
+		for k, v := range m {
+			results <- getJSONFromLocal(k, v)
 		}
 	}
+}
 
-	if err := scanner.Err(); err != nil {
-		return newlist, err
-	}
-
-	return newlist, nil
+// retrieve a JSON output from HTTPreserve without talking to the server
+func httpreserveJSONOutput(link string, filename string) string {
+	return getJSONFromLocal(link, filename)
 }
 
 // demo linkmap...

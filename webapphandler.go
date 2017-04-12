@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/httpreserve/httpreserve"
+	"log"
 	"os"
-	"sync"
 	"time"
 )
 
@@ -24,8 +24,6 @@ type processLog struct {
 	lmap     map[string]interface{}
 }
 
-var serverWG sync.WaitGroup
-
 func clockOut() string {
 	t := time.Now()
 	return t.Format("Mon Jan _2 15:04:05 2006")
@@ -33,12 +31,12 @@ func clockOut() string {
 
 // webapprun lets us start the server for the user to access
 func webappRun() {
-	defer serverWG.Done()
+	//defer serverWG.Done()
 
 	// pause to let our buffers begin to fill...
 	// TODO: look for safer, more idiomatic ways to solve...
-	time.Sleep(3 * time.Second)
-	fmt.Fprintln(os.Stderr, "server starting on localhost: http://127.0.0.1:2041")
+	//time.Sleep(3 * time.Second)
+	log.Println("Server starting on localhost: http://127.0.0.1:2041")
 
 	if port == "" {
 		port = "2041"
@@ -55,7 +53,6 @@ var lpcopyfrom, lpcopyto int
 var processedSlices []processLog
 
 func processlinkpool() {
-	defer serverWG.Done()
 
 	res := tsdatacopy(&lpcopyfrom, &lpcopyto, linkpool)
 
@@ -84,7 +81,7 @@ func processlinkpool() {
 
 		//TODO we have a problem to sort here where we're losing a single
 		//result... get threading working first
-		if lpcopyto == linkLen-1 {
+		if lpcopyto == linklen-1 {
 			var ps processLog
 			ps.complete = true
 			processedSlices = append(processedSlices, ps)
@@ -95,13 +92,12 @@ func processlinkpool() {
 var linkpool []string
 
 func makelinkpool(ch chan string) {
-	defer serverWG.Done()
 	linkpool = append(linkpool, <-ch)
 }
 
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
-func webappHandler(ch chan string) {
+func webappHandler(js string) {
 
 	//serverWG.Add(1)
 	//go makelinkpool(ch)
