@@ -141,13 +141,10 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 			pscopy = pldatacopylen(&pscopyfrom, &pscopyto, processedSlices, 1)
 		}
 
-
-		//ensure neither buffer overruns the other... 
+		//ensure neither buffer overruns the other...
 		if buffersize > 0 && buffersize <= processupdate {
 
 			if !complete && indexlog < processupdate {
-
-				//log.Println(response, pscopy[indexlog].complete, buffersize, processupdate, indexlog)
 
 				if pscopy[indexlog].complete == true {
 					log.Println("received complete signal.")
@@ -155,14 +152,12 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				}
 
 				response = formatOutput(pscopy[indexlog], response)
-				log.Println(indexlog+1, "of", processupdate, "processed slices.", "(" + string(linklen) + ")")
+				log.Println(indexlog+1, "of", processupdate, "processed slices.")
 			}
 
 			//finished processing what we've got, update indexlog
 			//and only update indexlog if we've not got overunning buffers...
 			indexlog++
-		} else {
-			log.Println("ND:", indexlog, "of", processupdate, "processed slices.", "(" + string(linklen) + ")")
 		}
 
 		// Let the client poll, unless a suitable exit condition is found...
@@ -171,6 +166,6 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 			fmt.Fprintf(w, "false•"+response)
 		} else {
 			fmt.Fprintf(w, "true•"+response)
-		} 
+		}
 	}
 }

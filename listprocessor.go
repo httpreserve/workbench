@@ -8,13 +8,11 @@ import (
 	"sync"
 )
 
-var linklen int
+var pscomplete = false
 
 // list handler to help us kick off some go channels
 // we pass a first class function to help route our output
 func listHandler(outputHandler func(js string)) {
-
-	//fmt.Println("in list handler")
 
 	link := make(chan map[string]string)
 	results := make(chan string)
@@ -25,7 +23,7 @@ func listHandler(outputHandler func(js string)) {
 	for w := 0; w <= 20; w++ {
 		wg.Add(1)
 		go getJSON(link, results, wg)
-	} 
+	}
 
 	// Create a link map for output to the output handlers
 	go func() {
@@ -65,18 +63,19 @@ func listHandler(outputHandler func(js string)) {
 
 	go func() {
 		wg.Wait()
+		pscomplete = true
+		linklen++
 		close(results)
 	}()
 
 	for js := range results {
 		outputHandler(js)
 	}
-
-	//fmt.Println("out of list handler")
-
 }
 
-func getJSON(link <- chan map[string]string, results chan<- string, wg *sync.WaitGroup) {
+var linklen int
+
+func getJSON(link <-chan map[string]string, results chan<- string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for m := range link {
 		for k, v := range m {

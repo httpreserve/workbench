@@ -108,6 +108,7 @@ func programrunner() {
 	if jsonout {
 		fmt.Fprintf(os.Stdout, "%s", outputJSONHeader())
 		listHandler(jsonHandler)
+		outputjsonpool()
 		fmt.Fprintf(os.Stdout, "%s", outputJSONFooter())
 		return
 	}
@@ -135,7 +136,7 @@ func programrunner() {
 		// next we need to get the data from the file...
 		listHandler(webappHandler)
 
-		select{}
+		select {}
 		return
 	}
 

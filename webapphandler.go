@@ -6,6 +6,7 @@ import (
 	"github.com/httpreserve/httpreserve"
 	"log"
 	"os"
+	"sync"
 	"time"
 )
 
@@ -52,7 +53,8 @@ func webappRun() {
 var lpcopyfrom, lpcopyto int
 var processedSlices []processLog
 
-func processlinkpool() {
+func processlinkpool(wg *sync.WaitGroup) {
+	defer wg.Done()
 
 	res := tsdatacopy(&lpcopyfrom, &lpcopyto, linkpool)
 
@@ -81,7 +83,7 @@ func processlinkpool() {
 
 		//TODO we have a problem to sort here where we're losing a single
 		//result... get threading working first
-		if lpcopyto == linklen-1 {
+		if pscomplete {
 			var ps processLog
 			ps.complete = true
 			processedSlices = append(processedSlices, ps)
@@ -91,19 +93,23 @@ func processlinkpool() {
 
 var linkpool []string
 
-func makelinkpool(ch chan string) {
-	linkpool = append(linkpool, <-ch)
+func makelinkpool(js string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	linkpool = append(linkpool, js)
 }
 
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
 func webappHandler(js string) {
 
-	//serverWG.Add(1)
-	//go makelinkpool(ch)
+	wg := new(sync.WaitGroup)
 
-	//serverWG.Add(1)
-	//go processlinkpool()
+	wg.Add(1)
+	go makelinkpool(js, wg)
 
+	wg.Add(1)
+	go processlinkpool(wg)
+
+	wg.Wait()
 	return
 }

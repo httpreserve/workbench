@@ -152,18 +152,18 @@ func boltdbHandler(js string) {
 	var add = true
 
 	// retrieve a map from the structure and write it out to the
-	// bolt db. 
+	// bolt db.
 	lmap := storeStruct(ls, js)
 	if len(lmap) > 0 {
 		makeIDIndex(kb, lmap)
 
 		lmapid := convertInterface(lmap["id"])
-		for x := range(id) {
+		for x := range id {
 			if lmapid == id[x] {
 				add = false
 				log.Println("Already seen:", lmap["filename"], lmap["title"])
 				break
-			}				
+			}
 		}
 		if add {
 			makeIDIndex(kb, lmap)

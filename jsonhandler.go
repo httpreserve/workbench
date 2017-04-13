@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"os"
+	"sync"
 )
 
 func outputJSONHeader() string {
@@ -16,20 +17,35 @@ func outputJSONHeader() string {
 
 func outputJSONFooter() string {
 	var footer string
-	footer = footer + fmt.Sprintf("%s\n%s", "]", "}")
+	footer = footer + fmt.Sprintf("%s\n%s\n", "]", "}")
 	return footer
 }
 
 var jsonCount int
 
-// TODO: consider more idiomatic approaches to achieving what we do here,
-// that is, fmt.Println() is not really my approved approach (but it works (agile))
+// webappHanlder enables us to establish the web server and create
+// the structures we need to present our data to the user...
 func jsonHandler(js string) {
-	if js != "" {
-		if jsonCount < linklen {
-			fmt.Fprint(os.Stdout, js + ",")
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+	go makejsonpool(js, wg)
+	wg.Wait()
+	return
+}
+
+var jsonpool []string
+
+func makejsonpool(js string, wg *sync.WaitGroup) {
+	defer wg.Done()
+	jsonpool = append(jsonpool, js)
+}
+
+func outputjsonpool() {
+	for j := range jsonpool {
+		if j+1 < len(jsonpool) {
+			fmt.Fprint(os.Stdout, jsonpool[j]+",")
 		} else {
-			fmt.Fprint(os.Stdout, js)
+			fmt.Fprint(os.Stdout, jsonpool[j])
 		}
 	}
 }

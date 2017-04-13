@@ -1,4 +1,4 @@
-package main 
+package main
 
 // Thread safe data copy from one slice to another
 func tsdatacopy(copyfrom *int, copyto *int, list []string) []string {
