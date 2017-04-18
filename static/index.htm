@@ -18,18 +18,18 @@
   <style type="text/css">
 
    /*card styling*/
-	.card { overflow: auto; padding: 1rem; margin: .8rem; margin-left: 5px; margin-right: 5px; width: 700px; font-size: 14px; height: 316px; }
+	.card { overflow: auto; padding: 1rem; margin: .8rem; margin-left: 5px; margin-right: 5px; width: 700px; font-size: 13px; height: 316px; }
    .card:focus { outline: DARKGREY solid 1px; }
 
    /*carousel pane*/
-	div.httpreserve { border-style: solid; border-color: SLATEGREY; border-width: 1px; height: 350px; line-height: 200%; padding-top: -100px; }	
+	div.httpreserve { border-style: solid; border-color: SLATEGREY; border-width: 1px; height: 350px; line-height: 160%; padding-top: -100px; }	
    
    /*make card move to top of carousel pane*/
-   div.slick-list { margin-top: -22px; } 
+   div.slick-list { margin-top: -19px; } 
    	
    /*link styling*/
-   b.record { color: black; }
-	a.httpreservelink { color: SLATEGREY; }
+   b.record { color: black; font-size: 16px; }
+	a.httpreservelink { color: SLATEGREY; font-size: 14px; }
 
    /*slick buttons*/
    button.slick-prev:after { color: SLATEGREY; }
@@ -42,8 +42,8 @@
 	div.column2 { float: right; display: inline-block; }
 
    /*column styling*/
-	.column1 { width: 60%; margin:10px; padding: 1em; }
-	.column2 { width: 30%; margin:10px; padding: 1em; }
+	.column1 { width: 55%; margin:10px; padding: 1em; }
+	.column2 { width: 35%; margin:10px; padding: 1em; }
 	.screenshot { height: 180px; width: 180px; }
 
 	/*other page elements*/
@@ -60,6 +60,7 @@
    /*response table*/
    table{ table-layout: fixed; width: 200px; }
    th, td { width: 150px;}
+   td.two { width: 300px; }
 
    /*screenshot styling*/
    figure.screenshot { border-color: grey; border: 1px solid WHITE; width: 250px; height: 200px; } 
@@ -97,17 +98,17 @@
 			<!-- Example -->
 			<!--<div class="card">
 				 <div class="column1">
-						<b class="record">httpreserve record: </b><b><a class='httpreservelink' href='http://www.bbc.co.uk/radio'>http://www.bbc.co.uk/radio</a></b>
-						<br/><br/>
-                  <table class="responsetable">
-						<tr><td>Response:</td><td>200 OK</td></tr>
-						<tr><td>Archived:</td><td>true</td></tr>
-						<tr><td>Filename:</td><td>bbc radio</td></tr>
-						<tr><td><b>IA Earliest:</b></td><td><a class='httpreservelink' href='http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/</a></td></tr>
-						<tr><td><b>IA Latest:</b></td><td><a class='httpreservelink' href='http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/</a></td></tr>
-						<tr><td>IA Save Link:</td><td><a class='httpreservelink' href='http://web.archive.org/save/http://www.bbc.co.uk/radio'>http://web.archive.org/save/http://www.bbc.co.uk/radio</a></td></tr>
-						<tr><td>IA Response Code:</td><td>200</td></tr>
-						<tr><td>IA Response Text:</td><td>OK</td></tr>
+                  <table class="responsetable">             
+						<tr><td><b class="record">httpreserve record: </b></td><td><b><a class='httpreservelink' href='http://www.bbc.co.uk/radio'>http://www.bbc.co.uk/radio'</a></b></td>
+						<tr><td>&nbsp;</td><td>&nbsp;</td>                  
+						<tr><td>Response:</td><td class="two">200 OK</td></tr>
+						<tr><td>Archived:</td><td class="two">true</td></tr>
+						<tr><td>Filename:</td><td class="two">bbc radio</td></tr>
+						<tr><td><b>IA Earliest:</b></td><td class="two"><a class='httpreservelink' href='http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/</a></td></tr>
+						<tr><td><b>IA Latest:</b></td><td class="two"><a class='httpreservelink' href='http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/</a></td></tr>
+						<tr><td>IA Save Link:</td><td class="two"><a class='httpreservelink' href='http://web.archive.org/save/http://www.bbc.co.uk/radio'>http://web.archive.org/save/http://www.bbc.co.uk/radio</a></td></tr>
+						<tr><td>IA Response Code:</td><td class="two">200</td></tr>
+						<tr><td>IA Response Text:</td><td class="two">OK</td></tr>
                   </table>
 				 </div>
 				 <div class="column2">
@@ -115,11 +116,11 @@
                   <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
                            vMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPg0KIC
                            A8cGF0aCBkPSJNMCAwdjFoOHYtMWgtOHptNCAybC0zIDNoMnYzaDJ2LTNoMmwtMy0zeiIgLz4NCjwvc3ZnPg==" 
-                  width="240px" height="190px" alt="httpreserve"/></br>
+                  width="250px" height="200px" alt="httpreserve"/></br>
                   <figcaption><pre>screenshot for domain:</br>www.example.com</pre></figcaption>
                </figure>             
 				 </div>
-			 </div>-->
+			</div>-->
 		</div>
 		<div class="push"></div>
 		</p>

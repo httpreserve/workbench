@@ -55,9 +55,6 @@ func convertInterfaceHTML(v interface{}) string {
 		} else {
 			val = ""
 		}
-		if strings.Contains(val, "http") {
-			val = "<a class='httpreservelink' target='_blank' href='" + val + "'>" + val + "</a>"
-		}
 	case int:
 		val = fmt.Sprintf("%d", v)
 	case bool:
@@ -71,48 +68,97 @@ func convertInterfaceHTML(v interface{}) string {
 	return val
 }
 
+const b64template = "{{ BASE64LOGO }}"
+const screenshottemplate = "{{ SCREENSHOT CAPTION }}"
+
 const column2 = `
- <div class="column2">
-	 <b>screenshot:</b>
-	 <br/><br/>
-    <img class="screenshot" src="https://github.com/exponential-decay/httpreserve/raw/master/src/images/httpreserve-logo.png"/>
- </div>`
+<div class="column2">
+	<figure class="screenshot">
+		<img src="{{ BASE64LOGO }}" 
+		width="250px" height="200px" alt="httpreserve"/></br>
+		<figcaption><pre>screenshot for domain:</br>{{ SCREENSHOT CAPTION }}</figcaption>
+	</figure>             
+</div>`
+
+const b64httpreservelogo = `
+data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
+vMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPg0KIC
+A8cGF0aCBkPSJNMCAwdjFoOHYtMWgtOHptNCAybC0zIDNoMnYzaDJ2LTNoMmwtMy0zeiIgLz4NCjwvc3ZnPg==`
+
+const placeholdercaption = "www.example.com"
+
+const responseTable = `
+	<table class="responsetable">
+	<tr><td><b class="record">httpreserve record: </b></td><td class="two"><b><a class='httpreservelink' href='{{ DOMAIN }}'>{{ DOMAIN }}</td></tr>
+	<tr><td>&nbsp;</td><td class="two">&nbsp;</td></tr>
+	<tr><td>Response:</td><td class="two">{{ RESPONSE CODE }}</td></tr>
+	<tr><td>Archived:</td><td class="two">{{ ARCHVIED }}</td></tr>
+	<tr><td>Filename:</td><td class="two">{{ FILENAME }}</td></tr>
+	<tr><td>Title:</td><td class="two">{{ TITLE }}</td></tr>
+	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
+	<tr><td>IA Earliest:</b></td><td class="two"><a class='httpreservelink' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
+	<tr><td>IA Latest:</b></td><td class="two"><a class='httpreservelink' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
+	<tr><td>IA Save Link:</td><td class="two"><a class='httpreservelink' href='{{ IA SAVE }}'>{{ IA SAVE }}</a></td></tr>
+	<tr><td>IA Response Code:</td><td class="two">{{ IA CODE }}</td></tr>
+	<tr><td>IA Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
+   </table>
+`
+
+const tbDomain = "{{ DOMAIN }}"
+const tbCode = "{{ RESPONSE CODE }}"
+const tbText = "{{ RESPONSE TEXT }}"
+const tbArchived = "{{ ARCHVIED }}"
+const tbFname = "{{ FILENAME }}"
+const tbTitle = "{{ TITLE }}"
+const tbContentType = "{{ CONTENTTYPE }}"
+const tbIAEarly = "{{ IA EARLY }}"
+const tbIALatest = "{{ IA LATEST }}"
+const tbSaveLink = "{{ IA SAVE }}"
+const tbIACode = "{{ IA CODE }}"
+const tbIAText = "{{ IA TEXT }}"
+
+func tableReplace(ps processLog) string {
+	col1 := strings.Replace(responseTable, tbDomain, convertInterfaceHTML(ps.lmap["link"]), 2)
+	col1 = strings.Replace(col1, tbCode, convertInterfaceHTML(ps.lmap["response code"]), 1)
+	col1 = strings.Replace(col1, tbText, convertInterfaceHTML(ps.lmap["response text"]), 1)
+	col1 = strings.Replace(col1, tbArchived, convertInterfaceHTML(ps.lmap["archived"]), 1)
+	col1 = strings.Replace(col1, tbFname, convertInterfaceHTML(ps.lmap["filename"]), 1)
+	col1 = strings.Replace(col1, tbTitle, convertInterfaceHTML(ps.lmap["title"]), 1)
+	col1 = strings.Replace(col1, tbContentType, convertInterfaceHTML(ps.lmap["content-type"]), 1)
+	col1 = strings.Replace(col1, tbDomain, convertInterfaceHTML(ps.lmap["screen shot"]), 1)	
+	col1 = strings.Replace(col1, tbIAEarly, convertInterfaceHTML(ps.lmap["internet archive earliest"]), 2)					
+	col1 = strings.Replace(col1, tbIALatest, convertInterfaceHTML(ps.lmap["internet archive latest"]), 2)
+	col1 = strings.Replace(col1, tbSaveLink, makeSaveRequest(ps.lmap["internet archive save link"]), 2)
+	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)	
+	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)		
+	return col1
+}
+
+func addColumn1(columns string) string {
+	return "<div class=\"column1\">" + columns + "</div>"	
+	return ""
+}
+
+func addColumn2Default(columns string) string {
+	col2 := strings.Replace(column2, b64template, b64httpreservelogo, 1)
+	col2 = strings.Replace(col2, screenshottemplate, placeholdercaption, 1)
+	return columns + col2
+
+}
+
+func addColumn2Live(columns string) string {
+	return ""
+}
+
+func makeCardHTML(columns string) string {
+	return "<div class=\"card\">" + columns + "</div>"
+}
 
 func formatOutput(ps processLog, response string) string {
-
-	trStart := "<div class=\"card\">"
-	trColumn1 := "<div class=\"column1\">"
-
-	trLINK := "<b class=\"record\">httpreserve record: </b><b>" + convertInterfaceHTML(ps.lmap["link"]) + "</b>"
-	trRESP := "Response: " + convertInterfaceHTML(ps.lmap["response code"]) + " " + convertInterfaceHTML(ps.lmap["response text"])
-
-	trSAVED := "Archived: " + "<span id='httpreserve-saved'>" + convertInterfaceHTML(ps.lmap["archived"]) + "</span>"
-
-	trFNAME := "<b>Filename:</b> " + convertInterfaceHTML(ps.lmap["filename"])
-
-	trCONTENTTYPE := "Content Type: " + convertInterfaceHTML(ps.lmap["content-type"])
-	trTITLE := "Title: " + convertInterfaceHTML(ps.lmap["title"])
-
-	/* Placeholder for screenshot output when the service works for us... */
-	// trSCREEN := "Screenshot: " + convertInterfaceHTML(ps.lmap["screen shot"])
-
-	trIAEARLIEST := "<b>IA Earliest:</b> " + convertInterfaceHTML(ps.lmap["internet archive earliest"])
-	trIALATEST := "<b>IA Latest:</b> " + convertInterfaceHTML(ps.lmap["internet archive latest"])
-
-	trIASAVE := "IA Save Link: " + makeSaveRequest(ps.lmap["internet archive save link"])
-
-	trIARESPCODE := "IA Response Code: " + convertInterfaceHTML(ps.lmap["internet archive response code"])
-	trIARESPONSETEXT := "IA Response Text: " + convertInterfaceHTML(ps.lmap["internet archive response text"])
-
-	trColumn1End := "</div>"
-	trEnd := "</div>"
-	trBR := "<br/>"
-
-	response = response + trStart + trColumn1 + trLINK + trBR + trBR + trRESP + trBR + trSAVED +
-		trBR + trFNAME + trBR + trCONTENTTYPE + trBR + trTITLE + trBR + trIAEARLIEST + trBR + trIALATEST +
-		trBR + trIASAVE + trBR + trIARESPCODE + trBR + trIARESPONSETEXT + trBR + trColumn1End + column2 + trEnd
-
-	return response
+	columns := tableReplace(ps)
+	columns = addColumn1(columns)
+	columns = addColumn2Default(columns)
+	return makeCardHTML(columns)
 }
 
 var pscopy []processLog
