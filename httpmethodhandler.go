@@ -186,10 +186,10 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				if pscopy[indexlog].complete == true {
 					log.Println("received complete signal.")
 					complete = true
+				} else { 
+					response = formatOutput(pscopy[indexlog], response)
+					log.Println(indexlog+1, "of", processupdate, "processed slices.")
 				}
-
-				response = formatOutput(pscopy[indexlog], response)
-				log.Println(indexlog+1, "of", processupdate, "processed slices.")
 			}
 
 			//finished processing what we've got, update indexlog
