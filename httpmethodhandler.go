@@ -78,9 +78,9 @@ const responseTable = `
 	<tr><td>Filename:</td><td class="two">{{ FILENAME }}</td></tr>
 	<tr><td>Title:</td><td class="two">{{ TITLE }}</td></tr>
 	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
-	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelink' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
-	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelink' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
-	<tr><td>IA Save Link:</td><td class="two"><a target='_blank' class='httpreservelink' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
+	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
+	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
+	<tr><td>IA Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
 	<tr><td>IA Response Code:</td><td class="two">{{ IA CODE }}</td></tr>
 	<tr><td>IA Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
    </table>
