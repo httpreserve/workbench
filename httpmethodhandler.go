@@ -125,17 +125,17 @@ func tableReplace(ps processLog) string {
 	col1 = strings.Replace(col1, tbFname, convertInterfaceHTML(ps.lmap["filename"]), 1)
 	col1 = strings.Replace(col1, tbTitle, convertInterfaceHTML(ps.lmap["title"]), 1)
 	col1 = strings.Replace(col1, tbContentType, convertInterfaceHTML(ps.lmap["content-type"]), 1)
-	col1 = strings.Replace(col1, tbDomain, convertInterfaceHTML(ps.lmap["screen shot"]), 1)	
-	col1 = strings.Replace(col1, tbIAEarly, convertInterfaceHTML(ps.lmap["internet archive earliest"]), 2)					
+	col1 = strings.Replace(col1, tbDomain, convertInterfaceHTML(ps.lmap["screen shot"]), 1)
+	col1 = strings.Replace(col1, tbIAEarly, convertInterfaceHTML(ps.lmap["internet archive earliest"]), 2)
 	col1 = strings.Replace(col1, tbIALatest, convertInterfaceHTML(ps.lmap["internet archive latest"]), 2)
 	col1 = strings.Replace(col1, tbSaveLink, makeSaveRequest(ps.lmap["internet archive save link"]), 2)
-	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)	
-	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)		
+	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)
+	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)
 	return col1
 }
 
 func addColumn1(columns string) string {
-	return "<div class=\"column1\">" + columns + "</div>"	
+	return "<div class=\"column1\">" + columns + "</div>"
 	return ""
 }
 
