@@ -16,23 +16,39 @@
   <link rel="stylesheet" type="text/css" href="static/slick-lib/slick/slick-theme.css">
 
   <style type="text/css">
-	/*slider elements*/
-	.card { overflow: auto; background: #D35289 url('static/texture.gif'); color: #fefefe; padding: 1rem; margin: .8rem; margin-left: 20px; margin-right: 20px; width: 700px; font-size: 14px; height: 280px; }
-	div.httpreserve { border-style: groove; height: 350px; line-height: 200%; }	
-	b.record { color: black; }
-	a.httpreservelink { color: white; }
+
+   /*card styling*/
+	.card { overflow: auto; padding: 1rem; margin: .8rem; margin-left: 5px; margin-right: 5px; width: 700px; font-size: 14px; height: 316px; }
+   .card:focus { outline: DARKGREY solid 1px; }
+
+   /*carousel pane*/
+	div.httpreserve { border-style: solid; border-color: SLATEGREY; border-width: 1px; height: 350px; line-height: 200%; padding-top: -100px; }	
+   
+   /*make card move to top of carousel pane*/
+   div.slick-list { margin-top: -22px; } 
+   	
+   /*link styling*/
+   b.record { color: black; }
+	a.httpreservelink { color: SLATEGREY; }
+
+   /*slick buttons*/
+   button.slick-prev:after { color: SLATEGREY; }
+   button.slick-prev:before { color: SLATEGREY; }      
+   button.slick-next:after { color: SLATEGREY; }
+   button.slick-next:before { color: SLATEGREY; }      
 
 	/*card columns*/
-	div.column1 { float: left; display: inline-block; }
+	div.column1 { float: left; display: inline-block; text-align: justify; }
 	div.column2 { float: right; display: inline-block; }
 
-	.column1 { width: 60%; margin:5px; padding: 1em; }
-	.column2 { width: 30%; margin:5px; padding: 1em; }
+   /*column styling*/
+	.column1 { width: 60%; margin:10px; padding: 1em; }
+	.column2 { width: 30%; margin:10px; padding: 1em; }
 	.screenshot { height: 180px; width: 180px; }
 
 	/*other page elements*/
-	html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px }
-	body { background: #FFFFFF url('static/bgtexture.gif');  }
+	html, body { min-width:1050px; height: 100%; margin: 0; font-family: arial, verdana; font-size: 10px; margin-bottom: 20px; }
+	body { background: #FFFFFF; }
 	figcaption { font-family: times new roman, arial, verdana; font-size: 20px; font-weight: bold; margin-bottom: 8px; }
 	h4 { font-size: 18px; margin-bottom: -8px; }
 	th { text-align: left; }
@@ -40,6 +56,14 @@
 	div.error { background-color: #cc0000; color: white; padding-left: 10px; font-weight: bold; margin-top: -2px; margin-bottom: -2px; }
 	div.push { height: 100px; min-height: 50px; }
 	div.footer { height: 50px; margin: 0 auto ; width:200px; text-align: center; }
+
+   /*response table*/
+   table{ table-layout: fixed; width: 200px; }
+   th, td { width: 150px;}
+
+   /*screenshot styling*/
+   figure.screenshot { border-color: grey; border: 1px solid WHITE; width: 250px; height: 200px; } 
+   pre { font-size: 10px; line-height: 100%; }
 
   </style>
 
@@ -75,27 +99,25 @@
 				 <div class="column1">
 						<b class="record">httpreserve record: </b><b><a class='httpreservelink' href='http://www.bbc.co.uk/radio'>http://www.bbc.co.uk/radio</a></b>
 						<br/><br/>
-						Response: 200 OK
-						<br/>
-						Archived: true
-						<br/>
-						Filename: bbc radio
-						<br/>Screenshot: <br/>
-						<b>IA Earliest:</b> <a class='httpreservelink' href='http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/</a>
-						<br/>
-						<b>IA Latest:</b> <a class='httpreservelink' href='http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/</a>
-						<br/>
-						IA Save Link: <a class='httpreservelink' href='http://web.archive.org/save/http://www.bbc.co.uk/radio'>http://web.archive.org/save/http://www.bbc.co.uk/radio</a>
-						<br/>
-						IA Response Code: 200
-						<br/>
-						IA Response Text: OK
-						<br/>
+                  <table class="responsetable">
+						<tr><td>Response:</td><td>200 OK</td></tr>
+						<tr><td>Archived:</td><td>true</td></tr>
+						<tr><td>Filename:</td><td>bbc radio</td></tr>
+						<tr><td><b>IA Earliest:</b></td><td><a class='httpreservelink' href='http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/19980123111247/http://www.bbc.co.uk/radio/</a></td></tr>
+						<tr><td><b>IA Latest:</b></td><td><a class='httpreservelink' href='http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/'>http://web.archive.org/web/20170402071855/http://www.bbc.co.uk/radio/</a></td></tr>
+						<tr><td>IA Save Link:</td><td><a class='httpreservelink' href='http://web.archive.org/save/http://www.bbc.co.uk/radio'>http://web.archive.org/save/http://www.bbc.co.uk/radio</a></td></tr>
+						<tr><td>IA Response Code:</td><td>200</td></tr>
+						<tr><td>IA Response Text:</td><td>OK</td></tr>
+                  </table>
 				 </div>
 				 <div class="column2">
-					 <b>screenshot:</b>
-					 <br/><br/>
-			       <img class="screenshot" src="https://github.com/exponential-decay/httpreserve/raw/master/src/images/httpreserve-logo.png"/>
+               <figure class="screenshot">
+                  <img src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmc
+                           vMjAwMC9zdmciIHdpZHRoPSI4IiBoZWlnaHQ9IjgiIHZpZXdCb3g9IjAgMCA4IDgiPg0KIC
+                           A8cGF0aCBkPSJNMCAwdjFoOHYtMWgtOHptNCAybC0zIDNoMnYzaDJ2LTNoMmwtMy0zeiIgLz4NCjwvc3ZnPg==" 
+                  width="240px" height="190px" alt="httpreserve"/></br>
+                  <figcaption><pre>screenshot for domain:</br>www.example.com</pre></figcaption>
+               </figure>             
 				 </div>
 			 </div>-->
 		</div>
@@ -105,7 +127,7 @@
 	<div class="footer" id="footer">
 		A project by <a href="https://twitter.com/beet_keeper" alt="@beet_keeper on Twitter">@beet_keeper</a>
 		<br/>
-		On GitHub: <a href="https://github.com/exponential-decay/httpreserve-app" alt="httpreserve on GitHub">httpreserve</a>
+		On GitHub: <a href="https://github.com/exponential-decay/httpreserve-workbench" alt="httpreserve on GitHub">httpreserve</a>
 	</div>
 
   <script src="static/jquery/jquery-2.2.0.min.js" type="text/javascript"></script>
@@ -144,8 +166,6 @@
 		continueScroll.focus();
 }
 </script>
-	}
-  </script>
 
 </body>
 </html>
