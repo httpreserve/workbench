@@ -25,24 +25,6 @@ func min(a, b int) int {
 	return b
 }
 
-// make an id for the HTML elements we output...
-var savecount int
-
-// create a link that enables HTTPreserve to manage a
-func makeSaveRequest(v interface{}) string {
-	var val string
-	id := fmt.Sprintf("%d", savecount)
-	switch v.(type) {
-	case string:
-		if v != "" {
-			val = fmt.Sprintf("%s", v)
-			val = "<a class='httpreservelink' id=saveLink" + id + " target='_blank' href='javascript:saveToInternetArchive(\"" + val + "\");'>" + val + "</a>"
-		}
-	}
-	savecount++
-	return val
-}
-
 // convertInterface will help us pipe generic values from
 // the deconstruction of httpreserve.LinkStats to a string for
 // storage in BoltDB.
@@ -89,16 +71,16 @@ const placeholdercaption = "www.example.com"
 
 const responseTable = `
 	<table class="responsetable">
-	<tr><td><b class="record">httpreserve record: </b></td><td class="two"><b><a class='httpreservelink' href='{{ DOMAIN }}'>{{ DOMAIN }}</td></tr>
+	<tr><td><b class="record">httpreserve record: </b></td><td class="two"><b><a target='_blank' class='httpreservelink' href='{{ DOMAIN }}'>{{ DOMAIN }}</td></tr>
 	<tr><td>&nbsp;</td><td class="two">&nbsp;</td></tr>
 	<tr><td>Response:</td><td class="two">{{ RESPONSE CODE }}</td></tr>
 	<tr><td>Archived:</td><td class="two">{{ ARCHVIED }}</td></tr>
 	<tr><td>Filename:</td><td class="two">{{ FILENAME }}</td></tr>
 	<tr><td>Title:</td><td class="two">{{ TITLE }}</td></tr>
 	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
-	<tr><td>IA Earliest:</b></td><td class="two"><a class='httpreservelink' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
-	<tr><td>IA Latest:</b></td><td class="two"><a class='httpreservelink' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
-	<tr><td>IA Save Link:</td><td class="two"><a class='httpreservelink' href='{{ IA SAVE }}'>{{ IA SAVE }}</a></td></tr>
+	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelink' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
+	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelink' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
+	<tr><td>IA Save Link:</td><td class="two"><a target='_blank' class='httpreservelink' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
 	<tr><td>IA Response Code:</td><td class="two">{{ IA CODE }}</td></tr>
 	<tr><td>IA Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
    </table>
@@ -117,6 +99,9 @@ const tbSaveLink = "{{ IA SAVE }}"
 const tbIACode = "{{ IA CODE }}"
 const tbIAText = "{{ IA TEXT }}"
 
+var savecount int
+const tbSaveID = "{{ COUNT }}"
+
 func tableReplace(ps processLog) string {
 	col1 := strings.Replace(responseTable, tbDomain, convertInterfaceHTML(ps.lmap["link"]), 2)
 	col1 = strings.Replace(col1, tbCode, convertInterfaceHTML(ps.lmap["response code"]), 1)
@@ -128,9 +113,15 @@ func tableReplace(ps processLog) string {
 	col1 = strings.Replace(col1, tbDomain, convertInterfaceHTML(ps.lmap["screen shot"]), 1)
 	col1 = strings.Replace(col1, tbIAEarly, convertInterfaceHTML(ps.lmap["internet archive earliest"]), 2)
 	col1 = strings.Replace(col1, tbIALatest, convertInterfaceHTML(ps.lmap["internet archive latest"]), 2)
-	col1 = strings.Replace(col1, tbSaveLink, makeSaveRequest(ps.lmap["internet archive save link"]), 2)
+	col1 = strings.Replace(col1, tbSaveLink, convertInterfaceHTML(ps.lmap["internet archive save link"]), 2)
 	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)
 	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)
+
+	// make an id for the elements we output...
+	id := fmt.Sprintf("%d", savecount)
+	col1 = strings.Replace(col1, tbSaveID, id, 1)
+	savecount++
+
 	return col1
 }
 
