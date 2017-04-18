@@ -100,6 +100,7 @@ const tbIACode = "{{ IA CODE }}"
 const tbIAText = "{{ IA TEXT }}"
 
 var savecount int
+
 const tbSaveID = "{{ COUNT }}"
 
 func tableReplace(ps processLog) string {
@@ -186,7 +187,7 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 				if pscopy[indexlog].complete == true {
 					log.Println("received complete signal.")
 					complete = true
-				} else { 
+				} else {
 					response = formatOutput(pscopy[indexlog], response)
 					log.Println(indexlog+1, "of", processupdate, "processed slices.")
 				}
