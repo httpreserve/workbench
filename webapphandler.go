@@ -2,10 +2,8 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"github.com/httpreserve/httpreserve"
 	"log"
-	"os"
 	"sync"
 	"time"
 )
@@ -45,7 +43,7 @@ func webappRun() {
 
 	err := DefaultServer(port)
 	if err != nil {
-		fmt.Fprintln(os.Stderr, err)
+		log.Println(err)
 	}
 
 }
@@ -66,7 +64,7 @@ func processlinkpool(wg *sync.WaitGroup) {
 			ce := res[x]
 			err := json.Unmarshal([]byte(ce), &ls)
 			if err != nil {
-				fmt.Fprintln(os.Stderr, "problem unmarshalling data.", err)
+				log.Println("Problem unmarshalling data.", err)
 			}
 
 			// retrieve a map from the structure and write it out to the
@@ -81,8 +79,6 @@ func processlinkpool(wg *sync.WaitGroup) {
 			}
 		}
 
-		//TODO we have a problem to sort here where we're losing a single
-		//result... get threading working first
 		if pscomplete {
 			var ps processLog
 			ps.complete = true
@@ -104,11 +100,14 @@ func webappHandler(js string) {
 
 	wg := new(sync.WaitGroup)
 
-	wg.Add(1)
-	go makelinkpool(js, wg)
-
+	//TODO: Understand the essence of wait groups where the ordering
+	//of these, slightly backwards works... does processlinkpool just
+	//wait for makelinkpool????
 	wg.Add(1)
 	go processlinkpool(wg)
+
+	wg.Add(1)
+	go makelinkpool(js, wg)
 
 	wg.Wait()
 	return
