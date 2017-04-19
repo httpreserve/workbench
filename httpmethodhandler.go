@@ -189,7 +189,7 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 					complete = true
 				} else {
 					response = formatOutput(pscopy[indexlog], response)
-					log.Println(indexlog+1, "of", processupdate-1, "processed slices.")	//one will always tell us to stop processing
+					log.Println(indexlog+1, "of", processupdate-1, "processed slices.") //one will always tell us to stop processing
 				}
 			}
 
