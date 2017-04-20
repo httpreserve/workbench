@@ -24,7 +24,7 @@ func testDefaultServer() bool {
 	launchRemoteBackgroundProcess()
 
 	// setup a simple call to the server to look for a 200 OK response
-	sr, err := httpreserve.CreateSimpleRequest(http.MethodHead, defaulthpserver, false, "")
+	sr, err := httpreserve.CreateSimpleRequest(http.MethodHead, defaulthpserver, "")
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "%s\n", err)
 		return false
