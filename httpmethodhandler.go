@@ -128,7 +128,6 @@ func tableReplace(ps processLog) string {
 
 func addColumn1(columns string) string {
 	return "<div class=\"column1\">" + columns + "</div>"
-	return ""
 }
 
 func addColumn2Default(columns string) string {

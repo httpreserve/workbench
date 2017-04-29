@@ -137,7 +137,6 @@ func programrunner() {
 		listHandler(webappHandler)
 
 		select {}
-		return
 	}
 
 	if demo {
