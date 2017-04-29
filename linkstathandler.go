@@ -68,8 +68,8 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 	lmap["internet archive response code"] = ls.InternetArchiveResponseCode
 	lmap["internet archive response text"] = ls.InternetArchiveResponseText
 	lmap["archived"] = ls.Archived
-	lmap["protocol error"] = ls.ProtocolError
-	lmap["protocol error"] = ls.ProtocolErrorMessage
+	lmap["protocol error"] = ls.Error
+	lmap["protocol error"] = ls.ErrorMessage
 
 	return lmap
 }
