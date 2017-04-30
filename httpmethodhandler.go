@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/httpreserve/wayback"
 	"log"
 	"net/http"
 	"net/http/httputil"
@@ -78,8 +79,8 @@ const responseTable = `
 	<tr><td>Filename:</td><td class="two">{{ FILENAME }}</td></tr>
 	<tr><td>Title:</td><td class="two">{{ TITLE }}</td></tr>
 	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
-	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY }}</a></td></tr>
-	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST }}</a></td></tr>
+	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY HUMAN }}</a></td></tr>
+	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST HUMAN }}</a></td></tr>
 	<tr><td>IA Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
 	<tr><td>IA Response Code:</td><td class="two">{{ IA CODE }}</td></tr>
 	<tr><td>IA Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
@@ -93,11 +94,15 @@ const tbArchived = "{{ ARCHVIED }}"
 const tbFname = "{{ FILENAME }}"
 const tbTitle = "{{ TITLE }}"
 const tbContentType = "{{ CONTENTTYPE }}"
-const tbIAEarly = "{{ IA EARLY }}"
-const tbIALatest = "{{ IA LATEST }}"
 const tbSaveLink = "{{ IA SAVE }}"
 const tbIACode = "{{ IA CODE }}"
 const tbIAText = "{{ IA TEXT }}"
+
+//dates
+const tbIAEarly = "{{ IA EARLY }}"
+const tbIALatest = "{{ IA LATEST }}"
+const tbIAEarlyHuman = "{{ IA EARLY HUMAN }}"
+const tbIALatestHuman = "{{ IA LATEST HUMAN }}"
 
 var savecount int
 
@@ -112,8 +117,14 @@ func tableReplace(ps processLog) string {
 	col1 = strings.Replace(col1, tbTitle, convertInterfaceHTML(ps.lmap["title"]), 1)
 	col1 = strings.Replace(col1, tbContentType, convertInterfaceHTML(ps.lmap["content-type"]), 1)
 	col1 = strings.Replace(col1, tbDomain, convertInterfaceHTML(ps.lmap["screen shot"]), 1)
-	col1 = strings.Replace(col1, tbIAEarly, convertInterfaceHTML(ps.lmap["internet archive earliest"]), 2)
-	col1 = strings.Replace(col1, tbIALatest, convertInterfaceHTML(ps.lmap["internet archive latest"]), 2)
+
+	earlydate := convertInterfaceHTML(ps.lmap["internet archive earliest"])
+	latedate := convertInterfaceHTML(ps.lmap["internet archive latest"])
+	col1 = strings.Replace(col1, tbIAEarly, earlydate, 1)
+	col1 = strings.Replace(col1, tbIALatest, latedate, 1)
+	col1 = strings.Replace(col1, tbIAEarlyHuman, wayback.GetHumanDate(earlydate), 1)
+	col1 = strings.Replace(col1, tbIALatestHuman, wayback.GetHumanDate(latedate), 1)
+
 	col1 = strings.Replace(col1, tbSaveLink, convertInterfaceHTML(ps.lmap["internet archive save link"]), 2)
 	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)
 	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)
