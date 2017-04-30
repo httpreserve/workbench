@@ -146,7 +146,7 @@ func addColumn1(columns string) string {
 func addColumn2Default(ps processLog, columns string) string {
 	snap := convertInterfaceHTML(ps.lmap["screen shot"])
 	if snap == "" || strings.Contains(snap, httpreserve.SnapshotNotEnabled) ||
-		strings.Contains(snap, httpreserve.GenerateSnapshotErr) {
+		strings.Contains(snap, httpreserve.GenerateSnapshotErr) || strings.Contains(snap, httpreserve.ResponseIncorrect) {
 
 		//log that we're not outputting snapshot...
 		log.Println(snap, ps.lmap["link"])

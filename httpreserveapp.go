@@ -105,7 +105,7 @@ func getLocalLink() {
 }
 
 var htmcomplete bool
-var starttime time.Time 
+var starttime time.Time
 var elapsedtime time.Duration
 
 func programrunner() {
