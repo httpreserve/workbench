@@ -146,6 +146,10 @@ func addColumn2Default(ps processLog, columns string) string {
 	snap := convertInterfaceHTML(ps.lmap["screen shot"])
 	if snap == "" || strings.Contains(snap, httpreserve.SnapshotNotEnabled) ||
 		strings.Contains(snap, httpreserve.GenerateSnapshotErr) {
+
+		//log that we're not outputting snapshot...
+		log.Println(snap, ps.lmap["link"])
+
 		col2 := strings.Replace(column2, b64template, b64httpreservelogo, 1)
 		col2 = strings.Replace(col2, screenshottemplate, convertInterfaceHTML(ps.lmap["link"]), 1)
 		return columns + col2
