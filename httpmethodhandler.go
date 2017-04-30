@@ -2,6 +2,7 @@ package main
 
 import (
 	"fmt"
+	"github.com/httpreserve/httpreserve"
 	"github.com/httpreserve/wayback"
 	"log"
 	"net/http"
@@ -75,15 +76,15 @@ const responseTable = `
 	<tr><td><b class="record">httpreserve record: </b></td><td class="two"><b><a target='_blank' class='httpreservelink' href='{{ DOMAIN }}'>{{ DOMAIN }}</td></tr>
 	<tr><td>&nbsp;</td><td class="two">&nbsp;</td></tr>
 	<tr><td>Response:</td><td class="two">{{ RESPONSE CODE }}</td></tr>
-	<tr><td>Archived:</td><td class="two">{{ ARCHVIED }}</td></tr>
+	<tr><td>Internet Archive:</td><td class="two">{{ ARCHVIED }}</td></tr>
 	<tr><td>Filename:</td><td class="two">{{ FILENAME }}</td></tr>
 	<tr><td>Title:</td><td class="two">{{ TITLE }}</td></tr>
 	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
-	<tr><td>IA Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY HUMAN }}</a></td></tr>
-	<tr><td>IA Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST HUMAN }}</a></td></tr>
-	<tr><td>IA Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
-	<tr><td>IA Response Code:</td><td class="two">{{ IA CODE }}</td></tr>
-	<tr><td>IA Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
+	<tr><td>Wayback Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY HUMAN }}</a></td></tr>
+	<tr><td>Wayback Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST HUMAN }}</a></td></tr>
+	<tr><td>Wayback Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
+	<tr><td>Wayback Response:</td><td class="two">{{ IA CODE }}</td></tr>
+	<tr><td>Wayback Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
    </table>
 `
 
@@ -141,11 +142,20 @@ func addColumn1(columns string) string {
 	return "<div class=\"column1\">" + columns + "</div>"
 }
 
-func addColumn2Default(columns string) string {
-	col2 := strings.Replace(column2, b64template, b64httpreservelogo, 1)
-	col2 = strings.Replace(col2, screenshottemplate, placeholdercaption, 1)
-	return columns + col2
+func addColumn2Default(ps processLog, columns string) string {
+	snap := convertInterfaceHTML(ps.lmap["screen shot"])
+	if snap == "" || strings.Contains(snap, httpreserve.SnapshotNotEnabled) ||
+		strings.Contains(snap, httpreserve.GenerateSnapshotErr) {
+		col2 := strings.Replace(column2, b64template, b64httpreservelogo, 1)
+		col2 = strings.Replace(col2, screenshottemplate, convertInterfaceHTML(ps.lmap["link"]), 1)
+		return columns + col2
+	}
 
+	// we may have a screenshot we can use...
+	col2 := strings.Replace(column2, b64template, snap, 1)
+	col2 = strings.Replace(col2, screenshottemplate, convertInterfaceHTML(ps.lmap["link"]), 1)
+
+	return columns + col2
 }
 
 func addColumn2Live(columns string) string {
@@ -159,7 +169,7 @@ func makeCardHTML(columns string) string {
 func formatOutput(ps processLog, response string) string {
 	columns := tableReplace(ps)
 	columns = addColumn1(columns)
-	columns = addColumn2Default(columns)
+	columns = addColumn2Default(ps, columns)
 	return makeCardHTML(columns)
 }
 
