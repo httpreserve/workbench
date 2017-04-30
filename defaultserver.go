@@ -17,7 +17,8 @@ func httpreserveapp(w http.ResponseWriter, r *http.Request) {
 
 // Function to handle calls to save a page to internet archive
 func iaSaveApp(w http.ResponseWriter, r *http.Request) {
-	fmt.Fprintln(w, "Saving to the internet archive.")
+	handleSubmitToInternetArchive(w, r)
+	return
 }
 
 // 404 response handler for all non supported function

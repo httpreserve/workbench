@@ -12,7 +12,7 @@ function saveToInternetArchive(saveLink) {
 	xmlhttp.onreadystatechange = function() {
 		if (xmlhttp.readyState == XMLHttpRequest.DONE ) {
 			if (xmlhttp.status == 200) {
-				document.getElementById(iaSaved).innerHTML = xmlhttp.responseText;
+				var resp = xmlhttp.responseText;
 			}
 			else if (xmlhttp.status == 400) {
             document.getElementById(httpreserveError).innerHTML = '<div class="error"><br/>[IA SAVE WARNING] There was an error 400<br/></div><br/>';
@@ -23,7 +23,7 @@ function saveToInternetArchive(saveLink) {
 		}
 	};
 
-	var key="saveurl";
+	var key="url";
 	var value = saveLink;
 
    if (method.toLowerCase() == "post") {

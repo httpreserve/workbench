@@ -7,6 +7,7 @@ import (
 	"log"
 	"net/http"
 	"net/http/httputil"
+	"net/url"
 	"strings"
 	"time"
 )
@@ -83,7 +84,10 @@ const responseTable = `
 	<tr><td>Content-type:</td><td class="two">{{ CONTENTTYPE }}</td></tr>		
 	<tr><td>Wayback Earliest:</b></td><td class="two"><a target='_blank' class='httpreservelinkunder' href='{{ IA EARLY }}'>{{ IA EARLY HUMAN }}</a></td></tr>
 	<tr><td>Wayback Latest:</b></td><td class="two"><a id='savelink{{ COUNT }}' target='_blank' class='httpreservelinkunder' href='{{ IA LATEST }}'>{{ IA LATEST HUMAN }}</a></td></tr>
-	<tr><td>Wayback Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
+	<tr><td>Wayback Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' target='_blank' href='save?url={{ IA SAVE }}'>{{ IA SAVE }}</a></td></tr>
+	<!--USE BELOW WHEN WE ENABLE AJAX AGAIN-->
+	<!--<tr><td>Wayback Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>-->
+
 	<tr><td>Wayback Response:</td><td class="two">{{ IA CODE }}</td></tr>
 	<tr><td>Wayback Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
 	<tr><td>&nbsp;</td><td class="two">&nbsp;</td></tr>	
@@ -270,4 +274,101 @@ func concurrentresponse(w http.ResponseWriter, r *http.Request) {
 	} else {
 		fmt.Fprintf(w, "true•"+response)
 	}
+}
+
+const requestedURL = "url"
+const requestedFname = "filename"
+
+const errParsingQuery = "error parsing query sent via GET"
+const errNoURL = "no url specified, or too many"
+const errMultiFname = "no filename, or more than one filename specified, setting to ''"
+
+// Use this function to retrieve all the args sent to the handler
+func getLinkFname(w http.ResponseWriter, r *http.Request) (string, string, string) {
+
+	var link string
+	var fname string
+
+	switch r.Method {
+	case http.MethodGet:
+		lookup, err := url.ParseQuery(r.URL.RawQuery)
+		if err != nil {
+			return "", "", errParsingQuery
+		}
+
+		if val, ok := lookup[requestedURL]; ok {
+			if len(val) > 0 && len(val) < 2 {
+				link = val[0]
+				if strings.Contains(link, "http://web.archive.org/save/") {
+					link = strings.Replace(link, "http://web.archive.org/save/", "", 1)
+				}
+			}
+		}
+
+		if link == "" {
+			return "", "", errNoURL
+		}
+
+		if val, ok := lookup[requestedFname]; ok {
+			if len(val) > 0 && len(val) < 2 {
+				fname = val[0]
+			}
+		}
+
+	case http.MethodPost:
+		r.ParseForm()
+		log.Println(r)
+		link = r.Form.Get(requestedURL)
+		if strings.Contains(link, "http://web.archive.org/save/") {
+			link = strings.Replace(link, "http://web.archive.org/save/", "", 1)
+		}
+		fname = r.Form.Get(requestedFname)
+	}
+
+	return link, fname, ""
+}
+
+// submit link to internet archive, cloned from httpreserve
+func handleSubmitToInternetArchive(w http.ResponseWriter, r *http.Request) {
+
+	// push json to client
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Disposition", "inline")
+
+	var ls httpreserve.LinkStats
+
+	// get our variable values
+	link, fname, e := getLinkFname(w, r)
+	if e != "" {
+		log.Println("error getting link and filename")
+		ls.Error = true
+		ls.ErrorMessage = e
+		fmt.Fprintln(w, makeArray(ls))
+		return
+	}
+
+	// else continue to submit to internet archive
+	_, err := wayback.SubmitToInternetArchive(link, httpreserve.VersionText())
+	if err != nil {
+		ls.FileName = fname
+		ls.Link = link
+		ls.Error = true
+		ls.ErrorMessage = "saving link to archive didn't work, " + err.Error()
+		fmt.Fprintln(w, makeArray(ls))
+		return
+	}
+
+	fmt.Fprintln(w, retrieveLinkStats(link, fname))
+	return
+}
+
+// retrieve linkstats from httpreserve
+func retrieveLinkStats(link string, fname string) string {
+	ls, _ := httpreserve.GenerateLinkStats(link, fname, true)
+	return makeArray(ls)
+}
+
+func makeArray(ls httpreserve.LinkStats) string {
+	resp := httpreserve.MakeLinkStatsJSON(ls)
+	return resp 	
 }
