@@ -8,6 +8,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"strings"
+	"time"
 )
 
 // For debug, we have this function here just in case we need
@@ -192,42 +193,72 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%s", "time,"+clockOut())
 		return
 	case http.MethodPost:
-		response := ""
-		processupdate := len(processedSlices)
-		buffersize := len(pscopy)
+		//concurrentresponse(w, r)
+		basicresponse(w, r)
+		return
+	}
+}
 
-		// We want to maintain a whole copy of the list in memory to work
-		// from, e.g. to update the indexes of. Do that here.
-		if buffersize < processupdate && indexlog < processupdate {
-			pscopyfrom := 0
-			pscopy = pldatacopylen(&pscopyfrom, &pscopyto, processedSlices, 1)
-		}
-
-		//ensure neither buffer overruns the other...
-		if buffersize > 0 && buffersize <= processupdate {
-
-			if !complete && indexlog < processupdate {
-
-				if pscopy[indexlog].complete == true {
-					log.Println("received complete signal.")
-					complete = true
-				} else {
-					response = formatOutput(pscopy[indexlog], response)
-					log.Println(indexlog+1, "of", processupdate-1, "processed slices.") //one will always tell us to stop processing
-				}
-			}
-
-			//finished processing what we've got, update indexlog
-			//and only update indexlog if we've not got overunning buffers...
-			indexlog++
-		}
-
+func basicresponse(w http.ResponseWriter, r *http.Request) {
+	limit := len(htmpool)
+	response := ""
+	if htmcomplete && !complete {
+		ps := htmpool[indexlog]
+		response = formatOutput(ps, response)
+		log.Println(indexlog+1, "of", limit, "processed records.") //one will always tell us to stop processing
 		// Let the client poll, unless a suitable exit condition is found...
-		if complete {
+		if ps.complete == true {
+			complete = true
 			log.Println("Signalling client to stop polling.")
 			fmt.Fprintf(w, "false•"+response)
 		} else {
 			fmt.Fprintf(w, "true•"+response)
+			indexlog++
 		}
+	} else {
+		elapsedtime = time.Since(starttime)
+		response = "processing•" + elapsedtime.String()
+		fmt.Fprintf(w, response)
+	}
+}
+
+// not working but may work again in future...
+func concurrentresponse(w http.ResponseWriter, r *http.Request) {
+	response := ""
+	processupdate := len(processedSlices)
+	buffersize := len(pscopy)
+
+	// We want to maintain a whole copy of the list in memory to work
+	// from, e.g. to update the indexes of. Do that here.
+	if buffersize < processupdate && indexlog < processupdate {
+		pscopyfrom := 0
+		pscopy = pldatacopylen(&pscopyfrom, &pscopyto, processedSlices, 1)
+	}
+
+	//ensure neither buffer overruns the other...
+	if buffersize > 0 && buffersize <= processupdate {
+
+		if !complete && indexlog < processupdate {
+
+			if pscopy[indexlog].complete == true {
+				log.Println("received complete signal.")
+				complete = true
+			} else {
+				response = formatOutput(pscopy[indexlog], response)
+				log.Println(indexlog+1, "of", processupdate-1, "processed slices.") //one will always tell us to stop processing
+			}
+		}
+
+		//finished processing what we've got, update indexlog
+		//and only update indexlog if we've not got overunning buffers...
+		indexlog++
+	}
+
+	// Let the client poll, unless a suitable exit condition is found...
+	if complete {
+		log.Println("Signalling client to stop polling.")
+		fmt.Fprintf(w, "false•"+response)
+	} else {
+		fmt.Fprintf(w, "true•"+response)
 	}
 }

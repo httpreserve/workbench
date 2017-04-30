@@ -54,30 +54,53 @@ function httpreserve(formMethod) {
 
 // Global for all our table data
 // TODO: monitor performance as it may contain a lot of data
-var content = ""
+var content = "";
+var processed = false;
+var processtime = ""; 
 
 // Function to fomrat the data output by the server when it is received
 function formatRow(data_arr) {
 
-	var tableStart = "<table><th>time</th>";
-	var tableEnd = "</table>";
-	var padding = "<br/><br/><br/><br/>";
+	var httpreserveProcessing = "httpreserve-processing";
 
 	var arr = data_arr.split("•", 2);
-	var newRow = "";
 
-	if (data_arr.length > 0) {	
-		newRow = arr[1];
+	if (arr[0] != "processing")
+	{
+		if (!processed)
+		{
+			//give some stats back about the processing...
+		   document.getElementById(httpreserveProcessing).innerHTML = '<div class="processing"><br/>Processed: ' + processtime + '<br/></div><br/>';
+			processed = true;
+		}
+
+		var tableStart = "<table><th>time</th>";
+		var tableEnd = "</table>";
+		var padding = "<br/><br/><br/><br/>";
+
+		var arr = data_arr.split("•", 2);
+		var newRow = "";
+
+		if (data_arr.length > 0) {	
+			newRow = arr[1];
+		} else {
+			timer = 0;
+			return "";
+		}
+
+		if (arr[0] == "false") {
+			timer = 0;
+		}
+
+		// Add a slide
+		updateSlick(newRow);
+
+		//exit function
+		return
 	} else {
-		timer = 0;
-		return "";
+		//give some stats back about the processing...
+		processtime = arr[1];
+      document.getElementById(httpreserveProcessing).innerHTML = '<div class="processing"><br/>Processing: ' + processtime + '<br/></div><br/>';
 	}
-
-	if (arr[0] == "false") {
-		timer = 0;
-	}
-
-	// Add a slide
-	updateSlick(newRow);
 }
 

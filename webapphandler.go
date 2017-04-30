@@ -94,9 +94,46 @@ func makelinkpool(js string, wg *sync.WaitGroup) {
 	linkpool = append(linkpool, js)
 }
 
+// temporary webappHandler that gets the app working reliably...
+func webappHandler(js string) {
+	wg := new(sync.WaitGroup)
+	wg.Add(1)
+	go makehtmpool(js, wg)
+	wg.Wait()
+	return
+}
+
+var htmpool []processLog
+
+func makehtmpool(js string, wg *sync.WaitGroup) {
+	defer wg.Done()
+
+	var ls httpreserve.LinkStats
+	err := json.Unmarshal([]byte(js), &ls)
+	if err != nil {
+		log.Println("Problem unmarshalling data.", err)
+		return
+	}
+
+	// retrieve a map from the structure and write it out to the
+	// http server...
+	lmap := storeStruct(ls, js)
+	if len(lmap) > 0 {
+		var ps processLog
+		ps.js = js
+		ps.ls = ls
+		ps.lmap = lmap
+		htmpool = append(htmpool, ps)
+	}
+
+	log.Println("processed record:", len(htmpool))
+
+	return
+}
+
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
-func concurrentversion_not_working_webappHandler(js string) {
+func concurrentversionNotWorkingWebappHandler(js string) {
 
 	wg := new(sync.WaitGroup)
 

@@ -6,6 +6,7 @@ import (
 	"github.com/httpreserve/httpreserve"
 	"log"
 	"os"
+	"time"
 )
 
 var (
@@ -103,7 +104,33 @@ func getLocalLink() {
 	fmt.Fprintf(os.Stdout, "%s", js)
 }
 
+var htmcomplete bool
+var starttime time.Time 
+var elapsedtime time.Duration
+
 func programrunner() {
+
+	if webapp {
+
+		// processing time
+		starttime = time.Now()
+
+		// start web server and select{} below ensures
+		// main doesn't complete...
+		go webappRun()
+
+		// next we need to get the data from the file...
+		listHandler(webappHandler)
+
+		// signal the server to start serving responses
+		// todo: configure in parallel once this works
+		htmcomplete = true
+
+		htmpool[len(htmpool)-1].complete = true
+
+		// don't return from function...
+		select {}
+	}
 
 	if jsonout {
 		fmt.Fprintf(os.Stdout, "%s", outputJSONHeader())
@@ -125,18 +152,6 @@ func programrunner() {
 		defer closeKVALBolt()
 		listHandler(boltdbHandler)
 		return
-	}
-
-	if webapp {
-
-		// start web server and select{} below ensures
-		// main doesn't complete...
-		go webappRun()
-
-		// next we need to get the data from the file...
-		listHandler(webappHandler)
-
-		select {}
 	}
 
 	if demo {
