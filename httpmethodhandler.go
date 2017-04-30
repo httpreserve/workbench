@@ -370,5 +370,5 @@ func retrieveLinkStats(link string, fname string) string {
 
 func makeArray(ls httpreserve.LinkStats) string {
 	resp := httpreserve.MakeLinkStatsJSON(ls)
-	return resp 	
+	return resp
 }
