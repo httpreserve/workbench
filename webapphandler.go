@@ -96,7 +96,7 @@ func makelinkpool(js string, wg *sync.WaitGroup) {
 
 // webappHanlder enables us to establish the web server and create
 // the structures we need to present our data to the user...
-func webappHandler(js string) {
+func concurrentversion_not_working_webappHandler(js string) {
 
 	wg := new(sync.WaitGroup)
 
