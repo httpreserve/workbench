@@ -70,6 +70,7 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 	lmap["archived"] = ls.Archived
 	lmap["protocol error"] = ls.Error
 	lmap["protocol error"] = ls.ErrorMessage
+	lmap["stats creation time"] = ls.StatsCreationTime
 
 	return lmap
 }

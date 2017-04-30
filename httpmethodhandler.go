@@ -86,6 +86,8 @@ const responseTable = `
 	<tr><td>Wayback Save Link:</td><td class="two"><a target='_blank' class='httpreservelinkunder' href='javascript:saveToInternetArchive("{{ IA SAVE }}");'>{{ IA SAVE }}</a></td></tr>
 	<tr><td>Wayback Response:</td><td class="two">{{ IA CODE }}</td></tr>
 	<tr><td>Wayback Response Text:</td><td class="two">{{ IA TEXT }}</td></tr>
+	<tr><td>&nbsp;</td><td class="two">&nbsp;</td></tr>	
+	<tr><td>Stats Creation Time:</td><td class="two">{{ STATS TIME }}</td></tr>
    </table>
 `
 
@@ -105,6 +107,8 @@ const tbIAEarly = "{{ IA EARLY }}"
 const tbIALatest = "{{ IA LATEST }}"
 const tbIAEarlyHuman = "{{ IA EARLY HUMAN }}"
 const tbIALatestHuman = "{{ IA LATEST HUMAN }}"
+
+const tbStatTime = "{{ STATS TIME }}"
 
 var savecount int
 
@@ -130,6 +134,8 @@ func tableReplace(ps processLog) string {
 	col1 = strings.Replace(col1, tbSaveLink, convertInterfaceHTML(ps.lmap["internet archive save link"]), 2)
 	col1 = strings.Replace(col1, tbIACode, convertInterfaceHTML(ps.lmap["internet archive response code"]), 1)
 	col1 = strings.Replace(col1, tbIAText, convertInterfaceHTML(ps.lmap["internet archive response text"]), 1)
+
+	col1 = strings.Replace(col1, tbStatTime, convertInterfaceHTML(ps.lmap["stats creation time"]), 1)
 
 	// make an id for the elements we output...
 	id := fmt.Sprintf("%d", savecount)
@@ -193,6 +199,7 @@ func handleHttpreserve(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprintf(w, "%s", "time,"+clockOut())
 		return
 	case http.MethodPost:
+		//concurrent response is disabled until we do decent parallel processing
 		//concurrentresponse(w, r)
 		basicresponse(w, r)
 		return
@@ -216,7 +223,9 @@ func basicresponse(w http.ResponseWriter, r *http.Request) {
 			indexlog++
 		}
 	} else {
-		elapsedtime = time.Since(starttime)
+		if !htmcomplete {
+			elapsedtime = time.Since(starttime)
+		}
 		response = "processing•" + elapsedtime.String()
 		fmt.Fprintf(w, response)
 	}

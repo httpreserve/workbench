@@ -65,12 +65,14 @@ function formatRow(data_arr) {
 
 	var arr = data_arr.split("•", 2);
 
-	if (arr[0] != "processing")
-	{
-		if (!processed)
-		{
+	if (arr[0] != "processing") {
+		if (!processed) {
 			//give some stats back about the processing...
-		   document.getElementById(httpreserveProcessing).innerHTML = '<div class="processing"><br/>Processed: ' + processtime + '<br/></div><br/>';
+			if (processtime != "") {
+		   	document.getElementById(httpreserveProcessing).innerHTML = '<div class="processing"><br/>Processed: ' + processtime + '<br/></div><br/>';
+			} else {
+		   	document.getElementById(httpreserveProcessing).innerHTML = '<div class="processing"><br/>Processed' + processtime + '<br/></div><br/>';
+			}
 			processed = true;
 		}
 
