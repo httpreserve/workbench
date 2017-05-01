@@ -19,8 +19,9 @@ func listHandler(outputHandler func(js string)) {
 
 	wg := new(sync.WaitGroup)
 
-	// 10 chunks of work..?
-	for w := 0; w <= 20; w++ {
+	// batches of two... helps us to batch out work, e.g. to throttle
+	// server requests... two requests per second, IN THEORY!
+	for w := 0; w <= 2; w++ {
 		wg.Add(1)
 		go getJSON(link, results, wg)
 	}
@@ -78,6 +79,7 @@ var linklen int
 func getJSON(link <-chan map[string]string, results chan<- string, wg *sync.WaitGroup) {
 	defer wg.Done()
 	for m := range link {
+		// k filename, v link...
 		for k, v := range m {
 			results <- getJSONFromLocal(k, v)
 		}
@@ -86,7 +88,8 @@ func getJSON(link <-chan map[string]string, results chan<- string, wg *sync.Wait
 
 // retrieve a JSON output from HTTPreserve without talking to the server
 func httpreserveJSONOutput(link string, filename string) string {
-	return getJSONFromLocal(link, filename)
+	js := getJSONFromLocal(link, filename)
+	return js
 }
 
 // demo linkmap...
