@@ -91,16 +91,16 @@ func httpreserveJSONOutput(link string, filename string) string {
 
 // demo linkmap...
 var linkmap = map[string]string{
-	"http://www.taupofest.co.nz/":         "nz govt",
-	"http://www.siac.govt.nz":             "nz govt",
-	"http://www.bbc.co.uk/news":           "bbc news",
-	"http://www.bbc.co.uk/":               "bbc home",
-	"http://www.bbc.co.uk/radio":          "bbc radio",
-	"http://www.nationalarchives.gov.uk/": "tna",
-	"http://www.google.com":               "",
-	"http://google.com":                   "",
-	"http://www.exponentialdecay.co.uk":   "",
-	"http://www.archive.org":              "",
-	"http://perma.cc":                     "",
-	"http://wikipedia.org":                "",
+	"http://www.taupofest.co.nz/":       "nz govt",
+	"http://www.siac.govt.nz":           "nz govt",
+	"http://www.bbc.co.uk/news":         "bbc news",
+	"http://www.bbc.co.uk/":             "bbc home",
+	"http://www.bbc.co.uk/radio":        "bbc radio",
+	"https://www.moma.org/":             "moma",
+	"http://www.google.com":             "",
+	"http://google.com":                 "",
+	"http://www.exponentialdecay.co.uk": "",
+	"http://www.archive.org":            "",
+	"http://perma.cc":                   "",
+	"http://wikipedia.org":              "",
 }

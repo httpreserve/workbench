@@ -4,6 +4,7 @@ import (
 	"crypto/md5"
 	"fmt"
 	"github.com/httpreserve/httpreserve"
+	"github.com/httpreserve/wayback"
 )
 
 var structids []string
@@ -64,6 +65,8 @@ func storeStruct(ls httpreserve.LinkStats, js string) map[string]interface{} {
 	lmap["screen shot"] = ls.ScreenShot
 	lmap["internet archive latest"] = ls.InternetArchiveLinkLatest
 	lmap["internet archive earliest"] = ls.InternetArchiveLinkEarliest
+	lmap["wayback latest date"] = wayback.GetHumanDate(ls.InternetArchiveLinkLatest)
+	lmap["wayback earliest date"] = wayback.GetHumanDate(ls.InternetArchiveLinkEarliest)
 	lmap["internet archive save link"] = ls.InternetArchiveSaveLink
 	lmap["internet archive response code"] = ls.InternetArchiveResponseCode
 	lmap["internet archive response text"] = ls.InternetArchiveResponseText

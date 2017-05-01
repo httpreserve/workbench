@@ -90,7 +90,7 @@ func getRemoteLink() {
 }
 
 func getJSONFromLocal(link string, linklabel string) string {
-	ls, err := httpreserve.GenerateLinkStats(link, linklabel, true)
+	ls, err := httpreserve.GenerateLinkStats(link, linklabel, false)
 	if err != nil {
 		log.Println("Error retrieving linkstat JSON may be incorrect:", err)
 	}
