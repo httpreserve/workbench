@@ -106,4 +106,10 @@ var linkmap = map[string]string{
 	"http://www.archive.org":            "",
 	"http://perma.cc":                   "",
 	"http://wikipedia.org":              "",
+	"http://www.ers.dol.govt.nz":        "",
+	"http://www.edcouncil.govt.nz":      "",
+	"http://www.med.govt.nz":            "",
+	"http://www.taxpolicy.ird.govt.nz":  "",
+	"http://unitedfuture.org.nz/":       "",
+	"http://unitednz.co.nz/":            "",
 }

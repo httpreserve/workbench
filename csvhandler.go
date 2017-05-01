@@ -8,10 +8,13 @@ import (
 	"strings"
 )
 
-var csvHeader = []string{"id", "filename", "content-type", "title", "analysis version number", "analysis version text", "link",
-	"response code", "response text", "screen shot", "wayback earliest date", "internet archive earliest", "wayback latest date",
-	"internet archive latest", "internet archive save link", "internet archive response code",
-	"internet archive response text", "archived", "protocol error", "protocol error"}
+var csvHeader = []string{"id", "filename", "link", "response code", "response text", "title",
+	"content-type", "screen shot",
+	"archived", "internet archive response code", "internet archive response text",
+	"wayback earliest date", "internet archive earliest",
+	"wayback latest date", "internet archive latest", "internet archive save link",
+	"protocol error", "protocol error",
+	"analysis version number", "analysis version text"}
 
 func outputCSVHeader() string {
 	var header string
