@@ -14,7 +14,7 @@ var csvHeader = []string{"id", "filename", "link", "response code", "response te
 	"wayback earliest date", "internet archive earliest",
 	"wayback latest date", "internet archive latest", "internet archive save link",
 	"protocol error", "protocol error",
-	"analysis version number", "analysis version text"}
+	"analysis version number", "analysis version text", "stats creation time"}
 
 func outputCSVHeader() string {
 	var header string
