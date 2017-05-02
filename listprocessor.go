@@ -46,7 +46,15 @@ func listHandler(outputHandler func(js string)) {
 			scanner := bufio.NewScanner(file)
 			for scanner.Scan() {
 				l := make(map[string]string)
-				split := strings.Split(scanner.Text(), ",")
+				row := scanner.Text()
+				var split []string
+				if strings.Contains(row, "\",\"") {
+					split = strings.Split(scanner.Text(), "\",\"")
+				} else if strings.Contains(row, "\", \"") {
+					split = strings.Split(scanner.Text(), "\", \"")
+				} else {
+					split = strings.Split(scanner.Text(), ",")
+				}
 				if len(split) != 2 {
 					fmt.Fprintf(os.Stderr, "ignoring: issue reading string from file: %s\n", scanner.Text())
 				} else {
