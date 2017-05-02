@@ -81,6 +81,8 @@ func getJSON(link <-chan map[string]string, results chan<- string, wg *sync.Wait
 	for m := range link {
 		// k filename, v link...
 		for k, v := range m {
+			k = strings.Trim(k, "\"")
+			v = strings.Trim(v, "\"")
 			results <- getJSONFromLocal(k, v)
 		}
 	}
