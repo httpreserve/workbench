@@ -25,6 +25,7 @@ Builds for different platforms will be available soon. Otherwise, install Go, ru
 
 * [Find and Connect Project:](http://www.findandconnectwrblog.info/2016/11/broken-links-broken-trust/) Nicola Laurent on the impact of broken links.
 * [Binary Trees? Automatically Identifying the links between born digital records:](https://www.youtube.com/watch?v=Ked9GRmKlRw) I write about hyperlinks as a public record in own right when submitted as part of a documentary heritage.
+* [HiberActive Pilot](https://www.era.lib.ed.ac.uk/handle/1842/23366) A scholarly publishing tool that extracts URLs, returns both the original URL and a perma-link. 
 
 ## License
 
