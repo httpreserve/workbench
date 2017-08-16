@@ -15,7 +15,7 @@ More information on the project can be found via the Open Preservation Foundatio
 Outputs:
 
 * JSON
-* CSV
+* CSV (Example: [Million Dollar Webpage](https://github.com/httpreserve/million-dollar-webpage)
 * BoltDB (embedded key-value database)
 * webapp (pictured) 
 
