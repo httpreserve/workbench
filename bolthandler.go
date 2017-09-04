@@ -50,7 +50,7 @@ func configureHashID() string {
 	hd.MinLength = namelen
 
 	//hash
-	h := hashids.NewWithData(hd)
+	h, _ := hashids.NewWithData(hd)
 	e, _ := h.Encode(name)
 	return e
 }
