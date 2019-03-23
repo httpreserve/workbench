@@ -6,6 +6,8 @@
 
 # httpreserve workbench
 
+UPDATE: A cli-only version of this tool is now available, see [httpreserve-linkstat](https://github.com/httpreserve/linkstat)
+
 Bulk analysis tool for the preservation of web links inside documentary heritage. 
 
 <img id="logo" src="https://github.com/httpreserve/workbench/raw/master/src/moma-demo.png" alt="httpreserve workbench"/>
