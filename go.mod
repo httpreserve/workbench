@@ -15,5 +15,5 @@ require (
 	github.com/kval-access-language/kval-scanner v0.0.0-20170504112421-4f097cacd289 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/speps/go-hashids v2.0.0+incompatible
-	golang.org/x/sys v0.0.0-20211216021012-1d35b9e2eb4e // indirect
+	golang.org/x/sys v0.1.0 // indirect
 )
