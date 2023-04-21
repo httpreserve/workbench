@@ -32,7 +32,7 @@ func testDefaultServer() bool {
 	}
 
 	// send a request to the server to see if it's there...
-	ls, err := httpreserve.HTTPFromSimpleRequest(sr)
+	ls, err := httpreserve.HTTPFromSimpleRequest(sr, "")
 	if err != nil {
 		if strings.Contains(err.Error(), "getsockopt: connection refused") {
 			fmt.Fprintln(os.Stderr, "httpreserve server is not running.")
