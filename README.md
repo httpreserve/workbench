@@ -1,6 +1,6 @@
 <div>
 <p align="center">
-<img id="logo" src="https://github.com/httpreserve/httpreserve/raw/master/src/images/httpreserve-logo.png" alt="httpreserve"/>
+<img id="logo" src="https://github.com/httpreserve/httpreserve/raw/main/src/images/httpreserve-logo.png" alt="httpreserve"/>
 </p>
 </div>
 
@@ -10,7 +10,7 @@ UPDATE: A cli-only version of this tool is now available, see [httpreserve-links
 
 Bulk analysis tool for the preservation of web links inside documentary heritage. 
 
-<img id="logo" src="https://github.com/httpreserve/workbench/raw/master/src/moma-demo.png" alt="httpreserve workbench"/>
+<img id="logo" src="https://github.com/httpreserve/workbench/raw/main/src/moma-demo.png" alt="httpreserve workbench"/>
 
 More information on the project can be found via the Open Preservation Foundation: http://openpreservation.org/blog/2017/05/19/links-all-of-the-way-down-httpreservation-of-documentary-heritage/
 
