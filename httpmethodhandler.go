@@ -106,7 +106,7 @@ const tbSaveLink = "{{ IA SAVE }}"
 const tbIACode = "{{ IA CODE }}"
 const tbIAText = "{{ IA TEXT }}"
 
-//dates
+// dates
 const tbIAEarly = "{{ IA EARLY }}"
 const tbIALatest = "{{ IA LATEST }}"
 const tbIAEarlyHuman = "{{ IA EARLY HUMAN }}"
