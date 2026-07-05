@@ -3,7 +3,7 @@ module github.com/httpreserve/workbench
 go 1.25.0
 
 require (
-	github.com/httpreserve/httpreserve v0.0.17
+	github.com/httpreserve/httpreserve v0.0.20
 	github.com/httpreserve/simplerequest v0.0.0-20230420130351-30c06b3538ab
 	github.com/httpreserve/wayback v0.1.0
 	github.com/justinas/alice v1.2.0
